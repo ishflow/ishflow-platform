@@ -76,7 +76,7 @@ const HOME_SOCIAL_PROOF: Record<DefaultLocale, SocialProofContent> = {
   en: {
     stats: [
       { value: '1,200+', label: 'companies on the platform' },
-      { value: '8 languages', label: 'interface localisation' },
+      { value: '5 languages', label: 'interface localisation' },
       { value: '99.9%', label: 'uptime over 12 months' },
       { value: '14 days', label: 'trial — no card needed' },
     ],
@@ -85,7 +85,7 @@ const HOME_SOCIAL_PROOF: Record<DefaultLocale, SocialProofContent> = {
   ru: {
     stats: [
       { value: '1 200+', label: 'компаний на платформе' },
-      { value: '8 языков', label: 'локализация интерфейса' },
+      { value: '5 языков', label: 'локализация интерфейса' },
       { value: '99.9%', label: 'аптайм за 12 месяцев' },
       { value: '14 дней', label: 'триал без карты' },
     ],
@@ -94,7 +94,7 @@ const HOME_SOCIAL_PROOF: Record<DefaultLocale, SocialProofContent> = {
   tr: {
     stats: [
       { value: '1 200+', label: 'platformdaki şirketler' },
-      { value: '8 dil', label: 'arayüz yerelleştirmesi' },
+      { value: '5 dil', label: 'arayüz yerelleştirmesi' },
       { value: '99.9%', label: '12 ay uptime' },
       { value: '14 gün', label: 'kartsız deneme' },
     ],
@@ -331,7 +331,7 @@ const HOME_DEMO: Record<DefaultLocale, DemoSectionContent> = {
     bullets: [
       'Pre-loaded customers, products, opening balances',
       'Read-only demo, refreshed nightly',
-      'Switch between 8 UI languages on the fly',
+      'Switch between 5 UI languages on the fly',
     ],
   },
   ru: {
@@ -340,7 +340,7 @@ const HOME_DEMO: Record<DefaultLocale, DemoSectionContent> = {
     bullets: [
       'Контрагенты, товары и начальные остатки уже загружены',
       'Только чтение, обновляется каждую ночь',
-      'Переключайте 8 языков интерфейса на лету',
+      'Переключайте 5 языков интерфейса на лету',
     ],
   },
   tr: {
@@ -349,7 +349,7 @@ const HOME_DEMO: Record<DefaultLocale, DemoSectionContent> = {
     bullets: [
       'Önceden yüklü müşteri, ürün, açılış bakiyeleri',
       'Yalnızca okuma — gecelik yenileme',
-      'Anında 8 arayüz dili arasında geçiş',
+      'Anında 5 arayüz dili arasında geçiş',
     ],
   },
 };
@@ -1231,7 +1231,7 @@ const HOME_STATS: Record<DefaultLocale, StatsStripContent> = {
   en: {
     items: [
       { value: '1,200+', label: 'companies on the platform' },
-      { value: '8 languages', label: 'interface localisation' },
+      { value: '5 languages', label: 'interface localisation' },
       { value: '99.9%', label: 'uptime over 12 months' },
       { value: '14 days', label: 'trial — no card needed' },
     ],
@@ -1239,7 +1239,7 @@ const HOME_STATS: Record<DefaultLocale, StatsStripContent> = {
   ru: {
     items: [
       { value: '1 200+', label: 'Компаний на платформе' },
-      { value: '8 языков', label: 'Локализация интерфейса' },
+      { value: '5 языков', label: 'Локализация интерфейса' },
       { value: '99.9%', label: 'Аптайм за 12 месяцев' },
       { value: '14 дней', label: 'Триал без карты' },
     ],
@@ -1247,7 +1247,7 @@ const HOME_STATS: Record<DefaultLocale, StatsStripContent> = {
   tr: {
     items: [
       { value: '1 200+', label: 'platformdaki şirketler' },
-      { value: '8 dil', label: 'arayüz yerelleştirmesi' },
+      { value: '5 dil', label: 'arayüz yerelleştirmesi' },
       { value: '99.9%', label: '12 ay uptime' },
       { value: '14 gün', label: 'kartsız deneme' },
     ],

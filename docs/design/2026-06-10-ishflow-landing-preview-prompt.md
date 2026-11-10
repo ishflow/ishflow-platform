@@ -106,7 +106,7 @@ paper «СЧЁТ-ФАКТУРА № СФ-001207» document mock (lines, totals, 
 «ПРОВЕДЕНО» stamp), caption «ISHFLOW / ENGINE» black display-black. Right: h2
 «СОБЕРЁТ УЧЁТ, ДОКУМЕНТЫ И ОТЧЁТЫ ЗА ВАС» + two paragraphs (metadata-driven story:
 describe catalogs/documents/registers → platform generates DB, forms, postings,
-reports; shared registers → balances reconcile to the kopeck; roles, audit, 8 UI
+reports; shared registers → balances reconcile to the kopeck; roles, audit, 5 UI
 languages built in).
 
 ### 5. ModulesSection (matte, py-32, star ring)

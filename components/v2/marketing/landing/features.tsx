@@ -35,8 +35,8 @@ const FEATURES: Feature[] = [
   },
   {
     icon: Globe,
-    title: '8 dilde, gün 1’den',
-    desc: 'RU, EN, TR, UZ, KY, DE, FR, ZH. Her bileşen iki dilli başlık (latin + кириллица) gösterir.',
+    title: '5 dilde, gün 1’den',
+    desc: 'RU, EN, TR, UZ, KY. Her bileşen iki dilli başlık (latin + кириллица) gösterir.',
   },
 ];
 

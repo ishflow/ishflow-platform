@@ -63,7 +63,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'next-intl-8-locales',
     tag: 'Çeviri & i18n',
-    title: "Gün 1'den 8 dil: next-intl ile çift dilli başlık disiplini",
+    title: "Gün 1'den 5 dil: next-intl ile çift dilli başlık disiplini",
     excerpt:
       'Latin + кириллица başlığını her ekranda göstermek niye sadece konfor değil — operasyonel zorunluluk.',
     date: '21 Nis',
