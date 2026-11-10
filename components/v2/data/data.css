@@ -1,0 +1,787 @@
+/* V2 — V0.3 data stream additions (registers + reports + saved views).
+ *
+ * Every selector is prefixed with `.v2-app` so these styles stay scoped to the
+ * V2 subtree and cannot leak into V1. Built from
+ * internal design mockups (rapor-*, ciro-*, alacaklar-hesabi,
+ * borclar-hesabi, stok-bakiyesi, satis, kayitli-gorunum-liste,
+ * modal-filter-builder, loading-register, loading-rapor, urun-fiyatlari).
+ */
+
+/* ───────── matrix register view (urun-fiyatlari) ───────── */
+.v2-app .matrix-wrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--border);
+}
+.v2-app .matrix-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-size: 12.5px;
+  table-layout: auto;
+}
+.v2-app .matrix-table th,
+.v2-app .matrix-table td {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.v2-app .matrix-table th {
+  font-weight: 500;
+  color: var(--fg-muted);
+  background: var(--surface);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: right;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.v2-app .matrix-table th.col-product,
+.v2-app .matrix-table th.col-product * {
+  text-align: left !important;
+}
+.v2-app .matrix-table th.col-product,
+.v2-app .matrix-table td.col-product {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--surface);
+  min-width: 180px;
+  border-right: 1px solid var(--border);
+  text-align: left;
+}
+.v2-app .matrix-table .kind-tag {
+  display: block;
+  font-size: 9px;
+  color: var(--fg-dim);
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+  margin-top: 1px;
+  text-align: right;
+}
+.v2-app .matrix-table .row-title {
+  font-size: 12.5px;
+  color: var(--fg);
+  line-height: 1.3;
+}
+.v2-app .matrix-table .row-sub {
+  font-size: 8px;
+  color: var(--fg-dim);
+  opacity: 0.4;
+  font-family: ui-monospace, monospace;
+  line-height: 1.2;
+  margin-top: 1px;
+  letter-spacing: 0.02em;
+}
+.v2-app .matrix-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.v2-app .matrix-cell.dim {
+  color: var(--fg-muted);
+  text-align: right;
+}
+.v2-app .matrix-cell .price {
+  font-weight: 500;
+  color: var(--fg);
+}
+.v2-app .matrix-cell .l2 {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 8.5px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  vertical-align: baseline;
+}
+.v2-app .matrix-cell .l2.l2-cost {
+  background: var(--warning-soft, rgba(245, 158, 11, 0.15));
+  color: var(--warning, #b45309);
+}
+.v2-app .matrix-empty {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--fg-muted);
+}
+.v2-app .matrix-empty-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+.v2-app .matrix-empty-subtitle {
+  font-size: 12px;
+}
+
+/* ───────── inline column bar (V4) ───────── */
+.v2-app .colbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.v2-app .colbar-label {
+  font-size: 10.5px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 4px;
+}
+.v2-app .colbar-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: var(--muted, rgba(255, 255, 255, 0.05));
+  color: var(--fg-muted);
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  user-select: none;
+}
+.v2-app .colbar-chip:hover {
+  background: var(--background, rgba(255, 255, 255, 0.08));
+  color: var(--fg);
+}
+.v2-app .colbar-chip.is-visible {
+  background: var(--accent-soft, rgba(59, 130, 246, 0.15));
+  color: var(--accent, #3b82f6);
+  border-color: var(--accent, #3b82f6);
+  font-weight: 500;
+}
+.v2-app .colbar-chip.is-visible:hover {
+  background: var(--accent, #3b82f6);
+  color: white;
+}
+.v2-app .colbar-chip.is-locked {
+  background: var(--surface);
+  color: var(--fg);
+  border-color: var(--border-strong, var(--border));
+  cursor: not-allowed;
+  font-weight: 500;
+}
+.v2-app .colbar-chip.is-locked:hover {
+  background: var(--surface);
+  color: var(--fg);
+}
+.v2-app .colbar-chip .lock,
+.v2-app .colbar-chip .xmark {
+  width: 10px;
+  height: 10px;
+  opacity: 0.7;
+}
+.v2-app .colbar-chip .plus {
+  color: var(--fg-dim);
+  font-weight: 600;
+  margin-right: 1px;
+}
+.v2-app .colbar-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  margin: 0 4px;
+}
+.v2-app .colbar-presets {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.v2-app .colbar-preset {
+  background: none;
+  border: none;
+  color: var(--accent, #3b82f6);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.v2-app .colbar-preset:hover {
+  background: var(--accent-soft, rgba(59, 130, 246, 0.12));
+}
+.v2-app .colbar-presets .sep {
+  color: var(--fg-dim);
+}
+
+/* ───────── grid helpers (3 + 4 columns) ───────── */
+.v2-app .grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.v2-app .grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 1100px) {
+  .v2-app .grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .v2-app .grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ───────── report hub (rapor-anasayfa) ───────── */
+.v2-app .report-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .v2-app .report-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.v2-app .report-card {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 14px;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.15s, transform 0.15s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  align-items: center;
+}
+.v2-app .report-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.v2-app .report-card .ico-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+}
+.v2-app .report-card .info .name {
+  font-size: 14.5px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.v2-app .report-card .info .desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.v2-app .report-card .arrow {
+  color: var(--text-dim);
+}
+
+/* ───────── P&L table (rapor-gelir-tablosu) ───────── */
+.v2-app .pl-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.v2-app .pl-table thead th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.v2-app .pl-table thead th.num {
+  text-align: right;
+}
+.v2-app .pl-table tbody td {
+  padding: 10px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.v2-app .pl-table tbody td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.v2-app .pl-table .pl-expand {
+  color: var(--text-muted);
+  font-size: 11px;
+  width: 24px;
+}
+.v2-app .pl-table .indent {
+  padding-left: 32px;
+}
+.v2-app .pl-table .row-section td {
+  font-weight: 600;
+  background: var(--surface-hover);
+}
+.v2-app .pl-table .row-subtotal td {
+  font-weight: 600;
+  background: var(--accent-soft);
+  color: var(--text);
+}
+.v2-app .pl-table .row-total td {
+  font-weight: 700;
+  background: var(--surface-hover);
+  border-top: 2px solid var(--border-strong);
+  font-size: 13.5px;
+}
+.v2-app .pl-delta {
+  font-size: 12px;
+  font-weight: 600;
+}
+.v2-app .pl-delta.up {
+  color: var(--success-text);
+}
+.v2-app .pl-delta.down {
+  color: var(--danger-text);
+}
+
+/* ───────── filter-builder modal (modal-filter-builder) ───────── */
+.v2-app .modal-head {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.v2-app .modal-head .glyph {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+}
+.v2-app .modal-head h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+.v2-app .modal-head .sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.v2-app .modal-body {
+  padding: 18px 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.v2-app .modal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+}
+.v2-app .modal-foot .left {
+  margin-right: auto;
+}
+.v2-app .fb-group {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--surface);
+  margin-bottom: 10px;
+}
+.v2-app .fb-group.nested {
+  background: var(--surface-hover);
+  margin-left: 0;
+}
+.v2-app .fb-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.v2-app .fb-group-head .label {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.v2-app .group-actions {
+  display: flex;
+  gap: 4px;
+}
+.v2-app .group-actions button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.v2-app .group-actions button:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.v2-app .fb-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.v2-app .fb-row .input {
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+}
+.v2-app .fb-row .del {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.v2-app .fb-row .del:hover {
+  background: var(--danger-soft);
+  color: var(--danger-text);
+}
+.v2-app .fb-actions {
+  display: flex;
+  gap: 6px;
+  padding-top: 4px;
+}
+.v2-app .fb-actions button {
+  border: 1px dashed var(--border);
+  background: transparent;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.v2-app .fb-actions button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.v2-app .logic-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.v2-app .logic-toggle .seg {
+  padding: 3px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.v2-app .logic-toggle .seg.is-active {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+/* ───────── saved views (kayitli-gorunum-liste) ───────── */
+.v2-app .active-view-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+.v2-app .active-view-banner .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-app .active-view-banner .badges {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: 10px;
+}
+.v2-app .active-view-banner .right {
+  display: inline-flex;
+  gap: 8px;
+}
+.v2-app .views-shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .v2-app .views-shell {
+    grid-template-columns: 1fr;
+  }
+}
+.v2-app .views-side {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+.v2-app .views-side .head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 6px 10px;
+}
+.v2-app .views-side .head h3 {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.v2-app .views-side .add {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+}
+.v2-app .views-side .scope {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 10px 6px 4px;
+}
+.v2-app .sv-item {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.v2-app .sv-item:hover {
+  background: var(--surface-hover);
+}
+.v2-app .sv-item.is-active {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+.v2-app .sv-item .sv-icon {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+}
+.v2-app .sv-item.is-active .sv-icon {
+  color: var(--accent);
+}
+.v2-app .sv-item .info div {
+  line-height: 1.4;
+}
+.v2-app .sv-item .info .meta {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.v2-app .sv-item .actions {
+  display: none;
+  gap: 2px;
+}
+.v2-app .sv-item:hover .actions {
+  display: inline-flex;
+}
+.v2-app .sv-item .actions button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.v2-app .sv-item .actions button:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+.v2-app .sv-item .star {
+  color: var(--warning);
+}
+.v2-app .share-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  background: var(--info-soft);
+  color: var(--info-text);
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 4px;
+}
+
+/* ───────── loading skeletons (loading-register / loading-rapor) ───────── */
+.v2-app .sk {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--surface-hover) 0%,
+    var(--surface) 50%,
+    var(--surface-hover) 100%
+  );
+  background-size: 200% 100%;
+  animation: v2-sk-shimmer 1.4s linear infinite;
+  border-radius: 4px;
+  height: 11px;
+  vertical-align: middle;
+}
+.v2-app .sk-pill {
+  display: inline-block;
+  height: 22px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--surface-hover) 0%,
+    var(--surface) 50%,
+    var(--surface-hover) 100%
+  );
+  background-size: 200% 100%;
+  animation: v2-sk-shimmer 1.4s linear infinite;
+}
+@keyframes v2-sk-shimmer {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+.v2-app .filter-bar-sk {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.v2-app .filter-bar-sk .left,
+.v2-app .filter-bar-sk .right {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.v2-app .sk-tbl {
+  width: 100%;
+  border-collapse: collapse;
+}
+.v2-app .sk-tbl thead th {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.v2-app .sk-tbl tbody td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.v2-app .sk-tbl tbody td.num {
+  text-align: right;
+}
+.v2-app .sum-card {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+@media (max-width: 1100px) {
+  .v2-app .sum-card {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.v2-app .sum-card .it {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ───────── aging report bars ───────── */
+.v2-app .aging-bars {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 1100px) {
+  .v2-app .aging-bars {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.v2-app .aging-bucket {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.v2-app .aging-bucket .lbl {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.v2-app .aging-bucket .val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.v2-app .aging-bucket .count {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.v2-app .aging-bucket .bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  overflow: hidden;
+}
+.v2-app .aging-bucket .bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+}
+.v2-app .aging-bucket.warn .bar > span {
+  background: var(--warning);
+}
+.v2-app .aging-bucket.danger .bar > span {
+  background: var(--danger);
+}

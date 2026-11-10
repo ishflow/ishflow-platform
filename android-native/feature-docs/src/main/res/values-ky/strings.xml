@@ -1,0 +1,34 @@
+<resources>
+    <string name="docs_tab_title">Документтер</string>
+    <string name="docs_filter_all">Баары</string>
+    <string name="docs_filter_sales">Сатуу</string>
+    <string name="docs_filter_purchases">Сатып алуу</string>
+    <string name="docs_filter_paymentReceived">Кириштер</string>
+    <string name="docs_filter_paymentSent">Төлөмдөр</string>
+    <string name="docs_kind_sales">Сатуу эсеп-фактурасы</string>
+    <string name="docs_kind_purchase">Сатып алуу эсеп-фактурасы</string>
+    <string name="docs_kind_paymentReceived">Кириш төлөм</string>
+    <string name="docs_kind_paymentSent">Чыгыш төлөм</string>
+    <string name="docs_empty_title">Документтер жок</string>
+    <string name="docs_error_title">Жүктөп алуу мүмкүн болмоду</string>
+    <string name="docs_action_retry">Кайталоо</string>
+    <string name="docs_action_refresh">Жаңылоо</string>
+    <string name="docs_filter_title">Чыпкалоо</string>
+    <string name="docs_filter_date_range">Күн аралыгы</string>
+    <string name="docs_filter_date_from">Баштап</string>
+    <string name="docs_filter_date_to">Чейин</string>
+    <string name="docs_filter_counterparty">Кардар/жеткирүүчү</string>
+    <string name="docs_filter_amount_range">Сумма аралыгы</string>
+    <string name="docs_filter_amount_min">Мин</string>
+    <string name="docs_filter_amount_max">Макс</string>
+    <string name="docs_filter_status">Абал</string>
+    <string name="docs_filter_status_draft">Долбоор</string>
+    <string name="docs_filter_status_posted">Өткөрүлгөн</string>
+    <string name="docs_filter_status_canceled">Жокко чыгарылган</string>
+    <string name="docs_filter_kind">Түрү</string>
+    <string name="docs_filter_apply">Колдонуу</string>
+    <string name="docs_filter_clear">Тазалоо</string>
+    <string name="docs_search_placeholder">Номери же кардар боюнча издөө</string>
+    <string name="docs_search_open">Издөөнү ачуу</string>
+    <string name="docs_search_close">Издөөнү жабуу</string>
+</resources>

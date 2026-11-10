@@ -1,0 +1,11 @@
+<resources>
+    <string name="prices_title">Fiyatlar</string>
+    <string name="prices_search_hint">Fiyat listesi ara...</string>
+    <string name="error_loading">Yükleme hatası</string>
+    <string name="price_detail_title">Fiyat Listesi</string>
+    <string name="price_code_label">Kod</string>
+    <string name="error_title">Hata</string>
+    <string name="action_retry">Yeniden dene</string>
+    <string name="empty_title">Veri yok</string>
+    <string name="action_refresh">Yenile</string>
+</resources>

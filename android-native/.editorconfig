@@ -1,0 +1,14 @@
+root = true
+
+[*.{kt,kts}]
+ktlint_code_style = intellij_idea
+ktlint_standard_no-wildcard-imports = enabled
+ktlint_standard_max-line-length = enabled
+ktlint_function_naming_ignore_when_annotated_with = Composable
+ktlint_standard_enum-entry-name-case = disabled
+max_line_length = 120
+indent_size = 4
+indent_style = space
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true

@@ -1,0 +1,27 @@
+disabled_rules:
+  - todo
+  - trailing_comma
+opt_in_rules:
+  - empty_count
+  - explicit_init
+  - first_where
+  - force_unwrapping
+  - implicit_return
+  - missing_docs
+included:
+  - ishflow
+  - Packages
+excluded:
+  - build
+  - .build
+  - "**/.build"
+  - "**/build"
+  - DerivedData
+  - "**/DerivedData"
+strict: true
+line_length:
+  warning: 120
+  error: 160
+function_body_length:
+  warning: 60
+  error: 100

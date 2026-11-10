@@ -1,0 +1,11 @@
+<resources>
+    <string name="prices_title">Цены</string>
+    <string name="prices_search_hint">Поиск прайс-листов...</string>
+    <string name="error_loading">Ошибка загрузки</string>
+    <string name="price_detail_title">Прайс-лист</string>
+    <string name="price_code_label">Код</string>
+    <string name="error_title">Ошибка</string>
+    <string name="action_retry">Повторить</string>
+    <string name="empty_title">Нет данных</string>
+    <string name="action_refresh">Обновить</string>
+</resources>

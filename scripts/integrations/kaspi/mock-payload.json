@@ -1,0 +1,47 @@
+{
+  "data": [
+    {
+      "id": "KSP-202605-0001",
+      "attributes": {
+        "createdDate": "2026-05-13T08:11:00Z",
+        "customer": {
+          "firstName": "Бекзат",
+          "lastName": "Тулегенов",
+          "cellPhone": "+77011234567",
+          "email": "bekzat.t@example.kz"
+        },
+        "entries": [
+          {
+            "offer": { "code": "SM-G991BZRDEUE", "name": "Samsung Galaxy S24 128GB" },
+            "quantity": 1,
+            "totalPrice": 459000
+          }
+        ]
+      }
+    },
+    {
+      "id": "KSP-202605-0002",
+      "attributes": {
+        "createdDate": "2026-05-13T09:33:00Z",
+        "customer": {
+          "firstName": "Айдана",
+          "lastName": "Кенжебаева",
+          "cellPhone": "+77019876543",
+          "email": "aidana.k@example.kz"
+        },
+        "entries": [
+          {
+            "offer": { "code": "MGM-DBG-04", "name": "Гарнитура Magicmic Pro" },
+            "quantity": 2,
+            "totalPrice": 28900
+          },
+          {
+            "offer": { "code": "CASE-S24-BL", "name": "Чехол Galaxy S24 синий" },
+            "quantity": 1,
+            "totalPrice": 4900
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+<resources>
+    <string name="prices_title">Prices</string>
+    <string name="prices_search_hint">Search price lists...</string>
+    <string name="error_loading">Failed to load</string>
+    <string name="error_title">Error</string>
+    <string name="action_retry">Retry</string>
+    <string name="empty_title">No data</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="price_detail_title">Price List</string>
+    <string name="price_code_label">Code</string>
+</resources>

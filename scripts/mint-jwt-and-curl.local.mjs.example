@@ -1,0 +1,29 @@
+// scripts/mint-jwt-and-curl.local.mjs.example
+//
+// Local-only helper to mint a mobile JWT and call mobile API endpoints from a shell.
+// Copy to `scripts/mint-jwt-and-curl.local.mjs` (gitignored).
+//
+// Usage:
+//   DATABASE_URL=$(op read "op://<vault>/<item>/local") \
+//   MOBILE_JWT_SECRET=$(op read "op://<vault>/<item>/secret") \
+//     node scripts/mint-jwt-and-curl.local.mjs
+
+import { PrismaClient } from '@prisma/client';
+import { SignJWT } from 'jose';
+
+const dbUrl = process.env.DATABASE_URL;
+if (!dbUrl) throw new Error('DATABASE_URL required');
+const secret = process.env.MOBILE_JWT_SECRET;
+if (!secret) throw new Error('MOBILE_JWT_SECRET required');
+
+const prisma = new PrismaClient({ datasources: { db: { url: dbUrl } } });
+const memberships = await prisma.$queryRawUnsafe(
+  `SELECT m.id, u.clerk_id AS "clerkUserId", t.id AS "tenantId", t.name
+     FROM membership m
+     JOIN "user" u ON u.id = m.user_id
+     JOIN tenant t ON t.id = m.tenant_id
+     LIMIT 5`
+);
+console.log('memberships:', memberships);
+
+// mint a token + curl an endpoint here

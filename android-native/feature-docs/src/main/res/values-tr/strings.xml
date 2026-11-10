@@ -1,0 +1,34 @@
+<resources>
+    <string name="docs_tab_title">Belgeler</string>
+    <string name="docs_filter_all">Tümü</string>
+    <string name="docs_filter_sales">Satış</string>
+    <string name="docs_filter_purchases">Alış</string>
+    <string name="docs_filter_paymentReceived">Tahsilat</string>
+    <string name="docs_filter_paymentSent">Ödeme</string>
+    <string name="docs_kind_sales">Satış faturası</string>
+    <string name="docs_kind_purchase">Alış faturası</string>
+    <string name="docs_kind_paymentReceived">Tahsilat</string>
+    <string name="docs_kind_paymentSent">Ödeme</string>
+    <string name="docs_empty_title">Henüz belge yok</string>
+    <string name="docs_error_title">Yükleme hatası</string>
+    <string name="docs_action_retry">Yeniden dene</string>
+    <string name="docs_action_refresh">Yenile</string>
+    <string name="docs_filter_title">Filtre</string>
+    <string name="docs_filter_date_range">Tarih aralığı</string>
+    <string name="docs_filter_date_from">Başlangıç</string>
+    <string name="docs_filter_date_to">Bitiş</string>
+    <string name="docs_filter_counterparty">Cari</string>
+    <string name="docs_filter_amount_range">Tutar aralığı</string>
+    <string name="docs_filter_amount_min">En az</string>
+    <string name="docs_filter_amount_max">En çok</string>
+    <string name="docs_filter_status">Durum</string>
+    <string name="docs_filter_status_draft">Taslak</string>
+    <string name="docs_filter_status_posted">Yayımlanmış</string>
+    <string name="docs_filter_status_canceled">İptal</string>
+    <string name="docs_filter_kind">Tür</string>
+    <string name="docs_filter_apply">Uygula</string>
+    <string name="docs_filter_clear">Temizle</string>
+    <string name="docs_search_placeholder">Numara veya cariye göre ara</string>
+    <string name="docs_search_open">Aramayı aç</string>
+    <string name="docs_search_close">Aramayı kapat</string>
+</resources>

@@ -1,0 +1,29 @@
+{
+  "regions": ["iad1"],
+  "crons": [
+    {
+      "path": "/api/cron/idempotency-cleanup",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/auto-delete-archived",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/trial-expiry",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/trial-ending-soon",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/low-stock-check",
+      "schedule": "30 9 * * *"
+    },
+    {
+      "path": "/api/cron/overdue-payments",
+      "schedule": "0 10 * * *"
+    }
+  ]
+}

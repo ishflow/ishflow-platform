@@ -1,0 +1,971 @@
+/* V2 admin — extra class set from variant-9 admin mockups.
+   Scoped under .v2-app so it cannot leak into V1. */
+
+.v2-app .av-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.v2-app .av-cell .av {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: white;
+  font-weight: 600;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.v2-app .invite-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+}
+.v2-app .invite-row + .invite-row {
+  margin-top: 8px;
+}
+.v2-app .invite-row .who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.v2-app .invite-row .who .icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--warning-soft);
+  color: var(--warning-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.v2-app .invite-row .em {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--text);
+}
+.v2-app .invite-row .sub {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.v2-app .invite-row .meta {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.v2-app .section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 12px;
+}
+.v2-app .section-head .title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.v2-app .section-head .title .count {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+/* Period close — wizard step indicator (variant-9 wstep parity) */
+.v2-app .wizard-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-bottom: 18px;
+}
+.v2-app .wstep {
+  position: relative;
+  padding: 14px 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+.v2-app .wstep:first-child {
+  border-radius: 12px 0 0 12px;
+}
+.v2-app .wstep:last-child {
+  border-radius: 0 12px 12px 0;
+}
+.v2-app .wstep + .wstep {
+  border-left: none;
+}
+.v2-app .wstep.is-active {
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border-color: var(--accent);
+}
+.v2-app .wstep.is-done {
+  background: var(--surface);
+}
+.v2-app .wstep .n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.v2-app .wstep.is-active .n,
+.v2-app .wstep.is-done .n {
+  background: var(--accent);
+  color: var(--accent-on);
+}
+.v2-app .wstep .lbl {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-app .wstep .meta {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Period close — checklist + period-tile */
+.v2-app .period-tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  margin-bottom: 18px;
+}
+.v2-app .period-tile .head {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 15px;
+}
+.v2-app .period-tile .sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.v2-app .check-section {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+.v2-app .check-line {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.v2-app .check-line:last-child {
+  border-bottom: none;
+}
+.v2-app .check-line .bullet {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.v2-app .check-line.is-done .bullet {
+  background: var(--success-soft);
+  color: var(--success-text);
+  border-color: var(--success-soft);
+}
+.v2-app .check-line.is-warn .bullet {
+  background: var(--warning-soft);
+  color: var(--warning-text);
+  border-color: var(--warning-soft);
+}
+.v2-app .check-line .body {
+  display: flex;
+  flex-direction: column;
+}
+.v2-app .check-line .body .ttl {
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-app .check-line .body .meta {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Role permission matrix */
+.v2-app .perm-matrix {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.v2-app .perm-matrix .ph,
+.v2-app .perm-matrix .pr {
+  padding: 10px 12px;
+  font-size: 12.5px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+.v2-app .perm-matrix .ph {
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--text);
+}
+.v2-app .perm-matrix .ph.center,
+.v2-app .perm-matrix .pr.center {
+  text-align: center;
+}
+.v2-app .perm-matrix .pr.dom {
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-app .perm-matrix > *:nth-last-child(-n + 5) {
+  border-bottom: none;
+}
+.v2-app .perm-matrix > *:nth-child(5n) {
+  border-right: none;
+}
+
+/* Audit detail JSON dump */
+.v2-app .json-dump {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+  font-size: 12px;
+  color: var(--text);
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-height: 480px;
+}
+
+/* Toggles list (platform-toggles / mobile-features) */
+.v2-app .toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.v2-app .toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+}
+.v2-app .toggle-row .info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.v2-app .toggle-row .info .title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+.v2-app .toggle-row .info .desc {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.v2-app .toggle-switch {
+  width: 34px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.v2-app .toggle-switch::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform 0.15s ease;
+}
+.v2-app .toggle-switch.on {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+.v2-app .toggle-switch.on::after {
+  background: white;
+  transform: translateX(14px);
+}
+
+/* Danger zone */
+.v2-app .danger-card {
+  border: 1px solid var(--danger-soft);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.v2-app .danger-card + .danger-card {
+  margin-top: 8px;
+}
+.v2-app .danger-card .text .title {
+  font-weight: 700;
+  color: var(--danger-text);
+  font-size: 13px;
+}
+.v2-app .danger-card .text .desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Ownerless banner */
+.v2-app .banner-ownerless {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--warning-soft);
+  background: var(--warning-soft);
+  color: var(--warning-text);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.v2-app .banner-ownerless .msg {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Branding preview swatches */
+.v2-app .swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.v2-app .color-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Form layouts (reusable for admin forms) */
+.v2-app .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+.v2-app .form-grid .full {
+  grid-column: 1 / -1;
+}
+.v2-app .field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.v2-app .field .hint {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Drop zone (org import) */
+.v2-app .drop-zone {
+  border: 1.5px dashed var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  background: var(--surface);
+  color: var(--text-muted);
+}
+.v2-app .drop-zone .ico {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.v2-app .drop-zone .label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* Role detail — permission table */
+.v2-app .perm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.v2-app .perm-table th,
+.v2-app .perm-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--divider, var(--border));
+  text-align: left;
+}
+.v2-app .perm-table th {
+  font-weight: 600;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  background: var(--surface-2);
+}
+.v2-app .perm-table th.col,
+.v2-app .perm-table td.col {
+  text-align: center;
+  width: 78px;
+}
+.v2-app .perm-table .mod-name {
+  font-weight: 600;
+}
+.v2-app .perm-table .mod-sub {
+  font-size: 11.5px;
+  color: var(--text-dim, var(--text-muted));
+  font-weight: 400;
+  margin-top: 2px;
+}
+.v2-app .cbx {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border-strong, var(--border));
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  cursor: pointer;
+}
+.v2-app .cbx svg {
+  width: 12px;
+  height: 12px;
+  color: transparent;
+}
+.v2-app .cbx.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.v2-app .cbx.is-on svg {
+  color: var(--accent-on);
+}
+.v2-app .cbx.is-na {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--border);
+}
+
+.v2-app .system-alert {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 20px;
+  background: color-mix(in srgb, var(--warning-text) 6%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--warning-text) 30%, var(--border));
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.v2-app .system-alert .ico {
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  background: var(--warning-soft);
+  color: var(--warning-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.v2-app .system-alert .ttl {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+.v2-app .system-alert .body {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+.v2-app .scope-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.v2-app .scope-table th,
+.v2-app .scope-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.v2-app .scope-table th {
+  font-weight: 600;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  background: var(--surface-2);
+}
+.v2-app .scope-table .ent {
+  font-weight: 600;
+}
+.v2-app .scope-table .filter {
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+  font-size: 11.5px;
+  background: var(--surface-2);
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+}
+.v2-app .scope-table .actions {
+  display: inline-flex;
+  gap: 4px;
+}
+.v2-app .scope-table .actions .pill {
+  font-size: 10.5px;
+  padding: 2px 7px;
+}
+
+/* Transfer ownership modal classes (also used by danger confirm modal) */
+.v2-app .form-grp {
+  margin-bottom: 14px;
+}
+.v2-app .form-grp label.lbl {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+.v2-app .form-grp .input {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+.v2-app .form-grp .hint {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.v2-app .suggest {
+  margin-top: 6px;
+  padding: 8px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.v2-app .suggest .av {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1e3a8a;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.v2-app .suggest .who .nm {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-app .suggest .who .em {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.v2-app .suggest .role-tag {
+  margin-left: auto;
+  font-size: 10.5px;
+  padding: 2px 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 4px;
+  font-weight: 600;
+}
+.v2-app .chk-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.v2-app .chk-row input {
+  margin-top: 3px;
+}
+.v2-app .chk-row .body {
+  flex: 1;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.v2-app .chk-row .body b {
+  color: var(--text);
+}
+.v2-app .warn-block {
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--danger-text) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--danger-text) 30%, var(--border));
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.v2-app .warn-block .ttl {
+  font-weight: 700;
+  color: var(--danger-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+/* Role detail — members list row */
+.v2-app .list-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.v2-app .list-row:last-of-type {
+  border-bottom: none;
+}
+.v2-app .list-row .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.v2-app .list-row .body {
+  flex: 1;
+}
+.v2-app .list-row .body .name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-app .list-row .body .meta {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Skeleton placeholder used by loading.tsx files */
+.v2-app .sk {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--surface-2) 0%,
+    color-mix(in srgb, var(--surface-2) 60%, var(--surface)) 50%,
+    var(--surface-2) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: v2-sk-shimmer 1.4s ease-in-out infinite;
+  vertical-align: middle;
+}
+@keyframes v2-sk-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Preview pill (used by role-new tags + various inline chips) */
+.v2-app .preview-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* Audit detail — summary + diff panes */
+.v2-app .audit-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+}
+.v2-app .audit-summary .summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+}
+.v2-app .audit-summary .summary-row:last-child {
+  border-bottom: none;
+}
+.v2-app .audit-summary .lbl {
+  color: var(--text-muted);
+}
+.v2-app .audit-summary .val {
+  color: var(--text);
+  font-weight: 500;
+  text-align: right;
+  max-width: 220px;
+  overflow-wrap: anywhere;
+}
+.v2-app .diff-tabs {
+  display: inline-flex;
+  gap: 4px;
+}
+.v2-app .diff-tab {
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.v2-app .diff-tab.is-active {
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 600;
+}
+.v2-app .diff-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.v2-app .diff-pane {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+  font-size: 12px;
+}
+.v2-app .diff-pane:last-child {
+  border-right: none;
+}
+.v2-app .diff-head {
+  padding: 8px 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.v2-app .diff-head.before {
+  color: var(--danger-text);
+}
+.v2-app .diff-head.after {
+  color: var(--success-text);
+}
+.v2-app .diff-body .diff-line {
+  display: flex;
+  padding: 2px 8px;
+  white-space: pre;
+}
+.v2-app .diff-body .diff-line .ln {
+  display: inline-block;
+  width: 24px;
+  color: var(--text-muted);
+  text-align: right;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+.v2-app .diff-body .diff-line.add {
+  background: color-mix(in srgb, var(--success-text) 10%, var(--surface));
+  color: var(--success-text);
+}
+.v2-app .diff-body .diff-line.del {
+  background: color-mix(in srgb, var(--danger-text) 10%, var(--surface));
+  color: var(--danger-text);
+}
+.v2-app .meta-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.v2-app .meta-strip .item .lbl {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.v2-app .meta-strip .item .val {
+  font-size: 12.5px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Audit log — action dot */
+.v2-app .act-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+.v2-app .act-dot.update {
+  background: var(--info-soft, color-mix(in srgb, var(--accent) 14%, var(--surface)));
+  color: var(--accent);
+}
+.v2-app .act-dot.create {
+  background: var(--success-soft);
+  color: var(--success-text);
+}
+.v2-app .act-dot.post {
+  background: var(--success-soft);
+  color: var(--success-text);
+}
+.v2-app .act-dot.delete {
+  background: var(--danger-soft, color-mix(in srgb, var(--danger-text) 14%, var(--surface)));
+  color: var(--danger-text);
+}
+.v2-app .act-dot.login {
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+/* FX rates — rate tiles */
+.v2-app .rate-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.v2-app .rate-tile {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.v2-app .rate-tile .pair {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.v2-app .rate-tile .val {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.v2-app .rate-tile .delta {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.v2-app .rate-tile .delta.up {
+  color: var(--success-text);
+}
+.v2-app .rate-tile .delta.down {
+  color: var(--danger-text);
+}
+.v2-app .rate-tile .meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.v2-app .pair-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Currency / FX detail card */
+.v2-app .kv-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 24px;
+}
+.v2-app .kv-grid .k {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+.v2-app .kv-grid .v {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+}

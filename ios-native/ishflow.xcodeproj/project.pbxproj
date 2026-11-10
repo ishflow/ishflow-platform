@@ -1,0 +1,960 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A11000000000000000000001 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000001 /* App.swift */; };
+		A11000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000002 /* ContentView.swift */; };
+		A11000000000000000000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000003 /* Assets.xcassets */; };
+		A11000000000000000000004 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000005 /* Localizable.xcstrings */; };
+		A11000000000000000000005 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000006 /* AppContainer.swift */; };
+		A11000000000000000000006 /* AppRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000007 /* AppRoot.swift */; };
+		A11000000000000000000007 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000008 /* MainTabView.swift */; };
+		A11000000000000000000008 /* OrgPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000009 /* OrgPickerView.swift */; };
+		A11000000000000000000009 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200000000000000000000A /* DashboardView.swift */; };
+		A1100000000000000000000A /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200000000000000000000B /* DashboardViewModel.swift */; };
+		C11000000000000000000099 /* OrganizationSwitcherSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12000000000000000000099 /* OrganizationSwitcherSheet.swift */; };
+		C11000000000000000000098 /* RoleNotConfiguredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12000000000000000000098 /* RoleNotConfiguredView.swift */; };
+		A1100000000000000000000B /* KPIRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200000000000000000000C /* KPIRow.swift */; };
+		A1100000000000000000000C /* DocumentRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200000000000000000000D /* DocumentRow.swift */; };
+		A1100000000000000000000D /* StatusChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200000000000000000000E /* StatusChip.swift */; };
+		A1100000000000000000000E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200000000000000000000F /* AppDelegate.swift */; };
+		A1100000000000000000000F /* KPICard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000010 /* KPICard.swift */; };
+		A11000000000000000000010 /* UpcomingReceivableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000011 /* UpcomingReceivableRow.swift */; };
+		A11000000000000000000011 /* ActivityFeedRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000012 /* ActivityFeedRow.swift */; };
+		A11000000000000000000012 /* LowStockBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000013 /* LowStockBanner.swift */; };
+		A11000000000000000000013 /* FloatingNewSaleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000014 /* FloatingNewSaleButton.swift */; };
+		A11000000000000000000099 /* NotificationBellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000099 /* NotificationBellButton.swift */; };
+		A11000000000000000000014 /* NewDocumentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000015 /* NewDocumentSheet.swift */; };
+		A11000000000000000000015 /* FloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000016 /* FloatingActionButton.swift */; };
+		A11000000000000000000016 /* FABOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000017 /* FABOverlay.swift */; };
+		A11000000000000000000019 /* MoreSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200000000000000000001A /* MoreSheet.swift */; };
+		A1100000000000000000001B /* FABMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200000000000000000001C /* FABMenu.swift */; };
+		B11000000000000000000001 /* IshflowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12000000000000000000001 /* IshflowTests.swift */; };
+		B11000000000000000000002 /* DashboardViewSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12000000000000000000002 /* DashboardViewSnapshotTests.swift */; };
+		B11000000000000000000003 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = B1H000000000000000000001 /* SnapshotTesting */; };
+		I11000000000000000000001 /* AppShared in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000001 /* AppShared */; };
+		I11000000000000000000002 /* APIClient in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000002 /* APIClient */; };
+		I11000000000000000000003 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000003 /* Auth */; };
+		I11000000000000000000004 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000004 /* Core */; };
+		I11000000000000000000005 /* Sales in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000005 /* Sales */; };
+		I11000000000000000000006 /* Prices in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000006 /* Prices */; };
+		I11000000000000000000007 /* Inventory in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000007 /* Inventory */; };
+		I11000000000000000000008 /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000008 /* Settings */; };
+		I11000000000000000000010 /* Cari in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000010 /* Cari */; };
+		I11000000000000000000011 /* Purchases in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000011 /* Purchases */; };
+		I11000000000000000000012 /* Docs in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000012 /* Docs */; };
+		I11000000000000000000013 /* Reports in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000013 /* Reports */; };
+		I11000000000000000000014 /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = H11000000000000000000014 /* Onboarding */; };
+		J11000000000000000000001 /* GoldenPathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = J12000000000000000000001 /* GoldenPathTests.swift */; };
+		J11000000000000000000099 /* NotificationCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = J12000000000000000000099 /* NotificationCenterTests.swift */; };
+		A11000000000000000000F01 /* DashboardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000F01 /* DashboardStyle.swift */; };
+		A11000000000000000000F02 /* HeroDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000F02 /* HeroDashboardView.swift */; };
+		A11000000000000000000F03 /* PastelBentoDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000F03 /* PastelBentoDashboardView.swift */; };
+		A11000000000000000000F04 /* ChartsDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12000000000000000000F04 /* ChartsDashboardView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B13000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0010000000000000000000AA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A14000000000000000000001;
+			remoteInfo = ishflow;
+		};
+		J13000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0010000000000000000000AA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A14000000000000000000001;
+			remoteInfo = ishflow;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A12000000000000000000001 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		A12000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A12000000000000000000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A12000000000000000000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A12000000000000000000005 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A12000000000000000000006 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
+		A12000000000000000000007 /* AppRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoot.swift; sourceTree = "<group>"; };
+		A12000000000000000000008 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		A12000000000000000000009 /* OrgPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrgPickerView.swift; sourceTree = "<group>"; };
+		A1200000000000000000000A /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		A1200000000000000000000B /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		C12000000000000000000099 /* OrganizationSwitcherSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationSwitcherSheet.swift; sourceTree = "<group>"; };
+		C12000000000000000000098 /* RoleNotConfiguredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleNotConfiguredView.swift; sourceTree = "<group>"; };
+		A1200000000000000000000C /* KPIRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPIRow.swift; sourceTree = "<group>"; };
+		A1200000000000000000000D /* DocumentRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentRow.swift; sourceTree = "<group>"; };
+		A1200000000000000000000E /* StatusChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusChip.swift; sourceTree = "<group>"; };
+		A1200000000000000000000F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A12000000000000000000010 /* KPICard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPICard.swift; sourceTree = "<group>"; };
+		A12000000000000000000011 /* UpcomingReceivableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingReceivableRow.swift; sourceTree = "<group>"; };
+		A12000000000000000000012 /* ActivityFeedRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityFeedRow.swift; sourceTree = "<group>"; };
+		A12000000000000000000013 /* LowStockBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LowStockBanner.swift; sourceTree = "<group>"; };
+		A12000000000000000000014 /* FloatingNewSaleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingNewSaleButton.swift; sourceTree = "<group>"; };
+		A12000000000000000000099 /* NotificationBellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBellButton.swift; sourceTree = "<group>"; };
+		A12000000000000000000015 /* NewDocumentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDocumentSheet.swift; sourceTree = "<group>"; };
+		A12000000000000000000016 /* FloatingActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingActionButton.swift; sourceTree = "<group>"; };
+		A12000000000000000000017 /* FABOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FABOverlay.swift; sourceTree = "<group>"; };
+		A1200000000000000000001A /* MoreSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreSheet.swift; sourceTree = "<group>"; };
+		A1200000000000000000001C /* FABMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FABMenu.swift; sourceTree = "<group>"; };
+		A15000000000000000000001 /* ishflow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ishflow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B12000000000000000000001 /* IshflowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IshflowTests.swift; sourceTree = "<group>"; };
+		B12000000000000000000002 /* DashboardViewSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewSnapshotTests.swift; sourceTree = "<group>"; };
+		B15000000000000000000001 /* ishflowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ishflowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		J12000000000000000000001 /* GoldenPathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoldenPathTests.swift; sourceTree = "<group>"; };
+		J12000000000000000000099 /* NotificationCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterTests.swift; sourceTree = "<group>"; };
+		J15000000000000000000001 /* ishflowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ishflowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A12000000000000000000F01 /* DashboardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardStyle.swift; sourceTree = "<group>"; };
+		A12000000000000000000F02 /* HeroDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroDashboardView.swift; sourceTree = "<group>"; };
+		A12000000000000000000F03 /* PastelBentoDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastelBentoDashboardView.swift; sourceTree = "<group>"; };
+		A12000000000000000000F04 /* ChartsDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsDashboardView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C11000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				I11000000000000000000001 /* AppShared in Frameworks */,
+				I11000000000000000000002 /* APIClient in Frameworks */,
+				I11000000000000000000003 /* Auth in Frameworks */,
+				I11000000000000000000004 /* Core in Frameworks */,
+				I11000000000000000000005 /* Sales in Frameworks */,
+				I11000000000000000000006 /* Prices in Frameworks */,
+				I11000000000000000000007 /* Inventory in Frameworks */,
+				I11000000000000000000008 /* Settings in Frameworks */,
+				I11000000000000000000010 /* Cari in Frameworks */,
+				I11000000000000000000011 /* Purchases in Frameworks */,
+				I11000000000000000000012 /* Docs in Frameworks */,
+				I11000000000000000000013 /* Reports in Frameworks */,
+				I11000000000000000000014 /* Onboarding in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C11000000000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B11000000000000000000003 /* SnapshotTesting in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C11000000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F10000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000002 /* ishflow */,
+				F10000000000000000000003 /* ishflowTests */,
+				F1000000000000000000000A /* ishflowUITests */,
+				F10000000000000000000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F10000000000000000000002 /* ishflow */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000005 /* App */,
+				F10000000000000000000007 /* Features */,
+				F10000000000000000000009 /* Wrappers */,
+				F10000000000000000000006 /* Resources */,
+				A12000000000000000000004 /* Info.plist */,
+			);
+			path = ishflow;
+			sourceTree = "<group>";
+		};
+		F10000000000000000000003 /* ishflowTests */ = {
+			isa = PBXGroup;
+			children = (
+				B12000000000000000000001 /* IshflowTests.swift */,
+				B12000000000000000000002 /* DashboardViewSnapshotTests.swift */,
+			);
+			path = ishflowTests;
+			sourceTree = "<group>";
+		};
+		F10000000000000000000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A15000000000000000000001 /* ishflow.app */,
+				B15000000000000000000001 /* ishflowTests.xctest */,
+				J15000000000000000000001 /* ishflowUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F10000000000000000000005 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A12000000000000000000001 /* App.swift */,
+				A12000000000000000000006 /* AppContainer.swift */,
+				A12000000000000000000007 /* AppRoot.swift */,
+				A12000000000000000000002 /* ContentView.swift */,
+				A12000000000000000000008 /* MainTabView.swift */,
+				A12000000000000000000009 /* OrgPickerView.swift */,
+				A1200000000000000000000F /* AppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F10000000000000000000006 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A12000000000000000000003 /* Assets.xcassets */,
+				A12000000000000000000005 /* Localizable.xcstrings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F10000000000000000000007 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				F1000000000000000000000D /* Auth */,
+				F10000000000000000000008 /* Dashboard */,
+				F1000000000000000000000C /* Shell */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		F1000000000000000000000D /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				C12000000000000000000098 /* RoleNotConfiguredView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		F10000000000000000000008 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				A1200000000000000000000A /* DashboardView.swift */,
+				A1200000000000000000000B /* DashboardViewModel.swift */,
+				C12000000000000000000099 /* OrganizationSwitcherSheet.swift */,
+				F1000000000000000000000B /* Components */,
+				F100000000000000000000F1 /* Variants */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		F10000000000000000000009 /* Wrappers */ = {
+			isa = PBXGroup;
+			children = (
+				A1200000000000000000000C /* KPIRow.swift */,
+				A1200000000000000000000D /* DocumentRow.swift */,
+				A1200000000000000000000E /* StatusChip.swift */,
+			);
+			path = Wrappers;
+			sourceTree = "<group>";
+		};
+		F1000000000000000000000A /* ishflowUITests */ = {
+			isa = PBXGroup;
+			children = (
+				J12000000000000000000001 /* GoldenPathTests.swift */,
+				J12000000000000000000099 /* NotificationCenterTests.swift */,
+			);
+			path = ishflowUITests;
+			sourceTree = "<group>";
+		};
+		F1000000000000000000000B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A12000000000000000000010 /* KPICard.swift */,
+				A12000000000000000000011 /* UpcomingReceivableRow.swift */,
+				A12000000000000000000012 /* ActivityFeedRow.swift */,
+				A12000000000000000000013 /* LowStockBanner.swift */,
+				A12000000000000000000014 /* FloatingNewSaleButton.swift */,
+				A12000000000000000000099 /* NotificationBellButton.swift */,
+				A12000000000000000000015 /* NewDocumentSheet.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F100000000000000000000F1 /* Variants */ = {
+			isa = PBXGroup;
+			children = (
+				A12000000000000000000F01 /* DashboardStyle.swift */,
+				A12000000000000000000F02 /* HeroDashboardView.swift */,
+				A12000000000000000000F03 /* PastelBentoDashboardView.swift */,
+				A12000000000000000000F04 /* ChartsDashboardView.swift */,
+			);
+			path = Variants;
+			sourceTree = "<group>";
+		};
+		F1000000000000000000000C /* Shell */ = {
+			isa = PBXGroup;
+			children = (
+				A12000000000000000000016 /* FloatingActionButton.swift */,
+				A12000000000000000000017 /* FABOverlay.swift */,
+				A1200000000000000000001A /* MoreSheet.swift */,
+				A1200000000000000000001C /* FABMenu.swift */,
+			);
+			path = Shell;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A14000000000000000000001 /* ishflow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E11000000000000000000001 /* Build configuration list for PBXNativeTarget "ishflow" */;
+			buildPhases = (
+				C12000000000000000000001 /* Sources */,
+				C11000000000000000000001 /* Frameworks */,
+				C13000000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ishflow;
+			packageProductDependencies = (
+				H11000000000000000000001 /* AppShared */,
+				H11000000000000000000002 /* APIClient */,
+				H11000000000000000000003 /* Auth */,
+				H11000000000000000000004 /* Core */,
+				H11000000000000000000005 /* Sales */,
+				H11000000000000000000006 /* Prices */,
+				H11000000000000000000007 /* Inventory */,
+				H11000000000000000000008 /* Settings */,
+				H11000000000000000000010 /* Cari */,
+				H11000000000000000000011 /* Purchases */,
+				H11000000000000000000012 /* Docs */,
+				H11000000000000000000013 /* Reports */,
+				H11000000000000000000014 /* Onboarding */,
+			);
+			productName = ishflow;
+			productReference = A15000000000000000000001 /* ishflow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B14000000000000000000001 /* ishflowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E11000000000000000000002 /* Build configuration list for PBXNativeTarget "ishflowTests" */;
+			buildPhases = (
+				C12000000000000000000002 /* Sources */,
+				C11000000000000000000002 /* Frameworks */,
+				C13000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B16000000000000000000001 /* PBXTargetDependency */,
+			);
+			name = ishflowTests;
+			packageProductDependencies = (
+				B1H000000000000000000001 /* SnapshotTesting */,
+			);
+			productName = ishflowTests;
+			productReference = B15000000000000000000001 /* ishflowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		J14000000000000000000001 /* ishflowUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E11000000000000000000004 /* Build configuration list for PBXNativeTarget "ishflowUITests" */;
+			buildPhases = (
+				C12000000000000000000003 /* Sources */,
+				C11000000000000000000003 /* Frameworks */,
+				C13000000000000000000003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				J16000000000000000000001 /* PBXTargetDependency */,
+			);
+			name = ishflowUITests;
+			productName = ishflowUITests;
+			productReference = J15000000000000000000001 /* ishflowUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0010000000000000000000AA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2640;
+				LastUpgradeCheck = 2640;
+				TargetAttributes = {
+					A14000000000000000000001 = {
+						CreatedOnToolsVersion = 26.4.1;
+					};
+					B14000000000000000000001 = {
+						CreatedOnToolsVersion = 26.4.1;
+						TestTargetID = A14000000000000000000001;
+					};
+					J14000000000000000000001 = {
+						CreatedOnToolsVersion = 26.4.1;
+						TestTargetID = A14000000000000000000001;
+					};
+				};
+			};
+			buildConfigurationList = E11000000000000000000003 /* Build configuration list for PBXProject "ishflow" */;
+			compatibilityVersion = "Xcode 16.0.Superseded.1";
+			developmentRegion = ru;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				ru,
+				en,
+				tr,
+				uz,
+				ky,
+				Base,
+			);
+			mainGroup = F10000000000000000000001;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				G11000000000000000000001 /* XCLocalSwiftPackageReference "Packages/AppShared" */,
+				G11000000000000000000002 /* XCLocalSwiftPackageReference "Packages/APIClient" */,
+				G11000000000000000000003 /* XCLocalSwiftPackageReference "Packages/Auth" */,
+				G11000000000000000000004 /* XCLocalSwiftPackageReference "Packages/Core" */,
+				G11000000000000000000005 /* XCLocalSwiftPackageReference "Packages/Sales" */,
+				G11000000000000000000006 /* XCLocalSwiftPackageReference "Packages/Prices" */,
+				G11000000000000000000007 /* XCLocalSwiftPackageReference "Packages/Inventory" */,
+				G11000000000000000000008 /* XCLocalSwiftPackageReference "Packages/Settings" */,
+				G11000000000000000000009 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+				G11000000000000000000010 /* XCLocalSwiftPackageReference "Packages/Cari" */,
+				G11000000000000000000011 /* XCLocalSwiftPackageReference "Packages/Purchases" */,
+				G11000000000000000000012 /* XCLocalSwiftPackageReference "Packages/Docs" */,
+				G11000000000000000000013 /* XCLocalSwiftPackageReference "Packages/Reports" */,
+				G11000000000000000000014 /* XCLocalSwiftPackageReference "Packages/Onboarding" */,
+			);
+			productRefGroup = F10000000000000000000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A14000000000000000000001 /* ishflow */,
+				B14000000000000000000001 /* ishflowTests */,
+				J14000000000000000000001 /* ishflowUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C13000000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A11000000000000000000003 /* Assets.xcassets in Resources */,
+				A11000000000000000000004 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C13000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C13000000000000000000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C12000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A11000000000000000000001 /* App.swift in Sources */,
+				A1100000000000000000000E /* AppDelegate.swift in Sources */,
+				A11000000000000000000005 /* AppContainer.swift in Sources */,
+				A11000000000000000000006 /* AppRoot.swift in Sources */,
+				A11000000000000000000002 /* ContentView.swift in Sources */,
+				A11000000000000000000007 /* MainTabView.swift in Sources */,
+				A11000000000000000000008 /* OrgPickerView.swift in Sources */,
+				A11000000000000000000009 /* DashboardView.swift in Sources */,
+				A1100000000000000000000A /* DashboardViewModel.swift in Sources */,
+				C11000000000000000000099 /* OrganizationSwitcherSheet.swift in Sources */,
+				C11000000000000000000098 /* RoleNotConfiguredView.swift in Sources */,
+				A1100000000000000000000B /* KPIRow.swift in Sources */,
+				A1100000000000000000000C /* DocumentRow.swift in Sources */,
+				A1100000000000000000000D /* StatusChip.swift in Sources */,
+				A1100000000000000000000F /* KPICard.swift in Sources */,
+				A11000000000000000000010 /* UpcomingReceivableRow.swift in Sources */,
+				A11000000000000000000011 /* ActivityFeedRow.swift in Sources */,
+				A11000000000000000000012 /* LowStockBanner.swift in Sources */,
+				A11000000000000000000013 /* FloatingNewSaleButton.swift in Sources */,
+				A11000000000000000000099 /* NotificationBellButton.swift in Sources */,
+				A11000000000000000000014 /* NewDocumentSheet.swift in Sources */,
+				A11000000000000000000015 /* FloatingActionButton.swift in Sources */,
+				A11000000000000000000016 /* FABOverlay.swift in Sources */,
+				A11000000000000000000019 /* MoreSheet.swift in Sources */,
+				A1100000000000000000001B /* FABMenu.swift in Sources */,
+				A11000000000000000000F01 /* DashboardStyle.swift in Sources */,
+				A11000000000000000000F02 /* HeroDashboardView.swift in Sources */,
+				A11000000000000000000F03 /* PastelBentoDashboardView.swift in Sources */,
+				A11000000000000000000F04 /* ChartsDashboardView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C12000000000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B11000000000000000000001 /* IshflowTests.swift in Sources */,
+				B11000000000000000000002 /* DashboardViewSnapshotTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C12000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				J11000000000000000000001 /* GoldenPathTests.swift in Sources */,
+				J11000000000000000000099 /* NotificationCenterTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B16000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A14000000000000000000001 /* ishflow */;
+			targetProxy = B13000000000000000000001 /* PBXContainerItemProxy */;
+		};
+		J16000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A14000000000000000000001 /* ishflow */;
+			targetProxy = J13000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D11000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		D11000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D12000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ishflow/ishflow.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YOUR_TEAM_ID;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ishflow/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.ishflow.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D12000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ishflow/ishflow.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YOUR_TEAM_ID;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ishflow/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.ishflow.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D13000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.ishflow.ios.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ishflow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ishflow";
+			};
+			name = Debug;
+		};
+		D13000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.ishflow.ios.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ishflow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ishflow";
+			};
+			name = Release;
+		};
+		D14000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.ishflow.ios.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ishflow;
+			};
+			name = Debug;
+		};
+		D14000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.ishflow.ios.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ishflow;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E11000000000000000000001 /* Build configuration list for PBXNativeTarget "ishflow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D12000000000000000000001 /* Debug */,
+				D12000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E11000000000000000000002 /* Build configuration list for PBXNativeTarget "ishflowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D13000000000000000000001 /* Debug */,
+				D13000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E11000000000000000000003 /* Build configuration list for PBXProject "ishflow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D11000000000000000000001 /* Debug */,
+				D11000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E11000000000000000000004 /* Build configuration list for PBXNativeTarget "ishflowUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D14000000000000000000001 /* Debug */,
+				D14000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		G11000000000000000000001 /* XCLocalSwiftPackageReference "Packages/AppShared" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/AppShared;
+		};
+		G11000000000000000000002 /* XCLocalSwiftPackageReference "Packages/APIClient" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/APIClient;
+		};
+		G11000000000000000000003 /* XCLocalSwiftPackageReference "Packages/Auth" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Auth;
+		};
+		G11000000000000000000004 /* XCLocalSwiftPackageReference "Packages/Core" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Core;
+		};
+		G11000000000000000000005 /* XCLocalSwiftPackageReference "Packages/Sales" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Sales;
+		};
+		G11000000000000000000006 /* XCLocalSwiftPackageReference "Packages/Prices" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Prices;
+		};
+		G11000000000000000000007 /* XCLocalSwiftPackageReference "Packages/Inventory" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Inventory;
+		};
+		G11000000000000000000008 /* XCLocalSwiftPackageReference "Packages/Settings" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Settings;
+		};
+		G11000000000000000000010 /* XCLocalSwiftPackageReference "Packages/Cari" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Cari;
+		};
+		G11000000000000000000011 /* XCLocalSwiftPackageReference "Packages/Purchases" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Purchases;
+		};
+		G11000000000000000000012 /* XCLocalSwiftPackageReference "Packages/Docs" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Docs;
+		};
+		G11000000000000000000013 /* XCLocalSwiftPackageReference "Packages/Reports" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Reports;
+		};
+		G11000000000000000000014 /* XCLocalSwiftPackageReference "Packages/Onboarding" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Onboarding;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		G11000000000000000000009 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.18.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B1H000000000000000000001 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = G11000000000000000000009 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+		H11000000000000000000001 /* AppShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppShared;
+		};
+		H11000000000000000000002 /* APIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = APIClient;
+		};
+		H11000000000000000000003 /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Auth;
+		};
+		H11000000000000000000004 /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
+		};
+		H11000000000000000000005 /* Sales */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Sales;
+		};
+		H11000000000000000000006 /* Prices */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Prices;
+		};
+		H11000000000000000000007 /* Inventory */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Inventory;
+		};
+		H11000000000000000000008 /* Settings */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Settings;
+		};
+		H11000000000000000000010 /* Cari */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Cari;
+		};
+		H11000000000000000000011 /* Purchases */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Purchases;
+		};
+		H11000000000000000000012 /* Docs */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Docs;
+		};
+		H11000000000000000000013 /* Reports */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Reports;
+		};
+		H11000000000000000000014 /* Onboarding */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Onboarding;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 0010000000000000000000AA /* Project object */;
+}

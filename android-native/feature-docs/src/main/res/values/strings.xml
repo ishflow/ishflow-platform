@@ -1,0 +1,34 @@
+<resources>
+    <string name="docs_tab_title">Documents</string>
+    <string name="docs_filter_all">All</string>
+    <string name="docs_filter_sales">Sales</string>
+    <string name="docs_filter_purchases">Purchases</string>
+    <string name="docs_filter_paymentReceived">Receipts</string>
+    <string name="docs_filter_paymentSent">Payments</string>
+    <string name="docs_kind_sales">Sales invoice</string>
+    <string name="docs_kind_purchase">Purchase invoice</string>
+    <string name="docs_kind_paymentReceived">Payment received</string>
+    <string name="docs_kind_paymentSent">Payment sent</string>
+    <string name="docs_empty_title">No documents</string>
+    <string name="docs_error_title">Failed to load</string>
+    <string name="docs_action_retry">Retry</string>
+    <string name="docs_action_refresh">Refresh</string>
+    <string name="docs_filter_title">Filter</string>
+    <string name="docs_filter_date_range">Date range</string>
+    <string name="docs_filter_date_from">From</string>
+    <string name="docs_filter_date_to">To</string>
+    <string name="docs_filter_counterparty">Customer/supplier</string>
+    <string name="docs_filter_amount_range">Amount range</string>
+    <string name="docs_filter_amount_min">Min</string>
+    <string name="docs_filter_amount_max">Max</string>
+    <string name="docs_filter_status">Status</string>
+    <string name="docs_filter_status_draft">Draft</string>
+    <string name="docs_filter_status_posted">Posted</string>
+    <string name="docs_filter_status_canceled">Canceled</string>
+    <string name="docs_filter_kind">Type</string>
+    <string name="docs_filter_apply">Apply</string>
+    <string name="docs_filter_clear">Clear</string>
+    <string name="docs_search_placeholder">Search by number or customer</string>
+    <string name="docs_search_open">Open search</string>
+    <string name="docs_search_close">Close search</string>
+</resources>

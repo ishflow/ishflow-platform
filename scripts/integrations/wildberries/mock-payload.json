@@ -1,0 +1,44 @@
+{
+  "orders": [
+    {
+      "id": "WB-1057281",
+      "createdAt": "2026-05-13T08:14:23Z",
+      "buyer": {
+        "fullName": "Айгуль Серикова",
+        "phone": "+77001234567",
+        "email": "aigul.serikova@example.kz"
+      },
+      "items": [
+        {
+          "barcode": "4607056030219",
+          "name": "Чай чёрный Akbar 100г",
+          "quantity": 2,
+          "price": 1850
+        },
+        {
+          "barcode": "8690632101842",
+          "name": "Шоколад Ülker Madlen 65г",
+          "quantity": 1,
+          "price": 920
+        }
+      ]
+    },
+    {
+      "id": "WB-1057282",
+      "createdAt": "2026-05-13T09:02:11Z",
+      "buyer": {
+        "fullName": "Данияр Бекболат",
+        "phone": "+77019998877",
+        "email": "d.bekbolat@example.kz"
+      },
+      "items": [
+        {
+          "barcode": "4607056030219",
+          "name": "Чай чёрный Akbar 100г",
+          "quantity": 5,
+          "price": 1850
+        }
+      ]
+    }
+  ]
+}

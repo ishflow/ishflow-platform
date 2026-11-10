@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:ishflow.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/AppShared">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/APIClient">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/Auth">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/Core">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/Sales">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/Prices">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/Inventory">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/Settings">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/SnapshotTests">
+   </FileRef>
+</Workspace>

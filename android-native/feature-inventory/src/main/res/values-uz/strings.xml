@@ -1,0 +1,36 @@
+<resources>
+    <string name="inventory_title">Zaxira</string>
+    <string name="inventory_search_hint">Mahsulot yoki ombor qidirish...</string>
+    <string name="product_detail_title">Mahsulot</string>
+    <string name="warehouse_label">Ombor</string>
+    <string name="quantity_label">Miqdor</string>
+    <string name="error_loading">Yuklab bo\'lmadi</string>
+    <string name="error_title">Xatolik</string>
+    <string name="action_retry">Qayta urinish</string>
+    <string name="empty_title">Ma\'lumot yo\'q</string>
+    <string name="action_refresh">Yangilash</string>
+    <string name="scan_title">Shtrix-kodni skanerlash</string>
+    <string name="scan_permission_rationale">Shtrix-kodlarni skanerlash uchun kamera ruxsati zarur.</string>
+    <string name="barcode_permission_rationale">Shtrix-kodlarni skanerlash uchun kameraga ruxsat kerak.</string>
+    <string name="barcode_permission_grant">Ruxsat berish</string>
+    <string name="inventory_filter_title">Filtr</string>
+    <string name="inventory_filter_category">Kategoriya</string>
+    <string name="inventory_filter_group">Guruh</string>
+    <string name="inventory_filter_warehouse">Ombor</string>
+    <string name="inventory_filter_low_stock">Past zaxira</string>
+    <string name="inventory_filter_apply">Qo\'llash</string>
+    <string name="inventory_filter_clear">Tozalash</string>
+    <string name="inventory_filter_empty">Mavjud variantlar yo\'q</string>
+    <string name="product_detail_total_stock">Omborda jami</string>
+    <string name="product_detail_balance_per_warehouse">Omborlar bo\'yicha</string>
+    <string name="product_detail_movements">So\'nggi harakatlar</string>
+    <string name="product_detail_empty_movements">Hozircha harakatlar yo\'q</string>
+    <string name="inventory_low_stock_badge">Past</string>
+    <string name="inventory_out_of_stock_badge">Yo\'q</string>
+    <string name="inventory_empty_title">Hozircha zaxira yo\'q</string>
+    <string name="inventory_empty_hint">Stok harakatini yozish uchun + tugmasini bosing</string>
+    <plurals name="inventory_warehouse_item_count">
+        <item quantity="one">%1$d ta mahsulot</item>
+        <item quantity="other">%1$d ta mahsulot</item>
+    </plurals>
+</resources>

@@ -1,0 +1,36 @@
+<resources>
+    <string name="inventory_title">Inventory</string>
+    <string name="inventory_search_hint">Search products or warehouses...</string>
+    <string name="product_detail_title">Product</string>
+    <string name="warehouse_label">Warehouse</string>
+    <string name="quantity_label">Quantity</string>
+    <string name="error_loading">Failed to load</string>
+    <string name="error_title">Error</string>
+    <string name="action_retry">Retry</string>
+    <string name="empty_title">No data</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="scan_title">Scan Barcode</string>
+    <string name="scan_permission_rationale">Camera permission is required to scan barcodes.</string>
+    <string name="barcode_permission_rationale">Camera access is required to scan barcodes.</string>
+    <string name="barcode_permission_grant">Grant permission</string>
+    <string name="inventory_filter_title">Filter</string>
+    <string name="inventory_filter_category">Category</string>
+    <string name="inventory_filter_group">Group</string>
+    <string name="inventory_filter_warehouse">Warehouse</string>
+    <string name="inventory_filter_low_stock">Low stock</string>
+    <string name="inventory_filter_apply">Apply</string>
+    <string name="inventory_filter_clear">Clear</string>
+    <string name="inventory_filter_empty">No options available</string>
+    <string name="product_detail_total_stock">Total in stock</string>
+    <string name="product_detail_balance_per_warehouse">Per warehouse</string>
+    <string name="product_detail_movements">Recent movements</string>
+    <string name="product_detail_empty_movements">No movements yet</string>
+    <string name="inventory_low_stock_badge">Low</string>
+    <string name="inventory_out_of_stock_badge">Out</string>
+    <string name="inventory_empty_title">No stock yet</string>
+    <string name="inventory_empty_hint">Tap + to record stock movement</string>
+    <plurals name="inventory_warehouse_item_count">
+        <item quantity="one">%1$d item</item>
+        <item quantity="other">%1$d items</item>
+    </plurals>
+</resources>

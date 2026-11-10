@@ -1,0 +1,18 @@
+{
+  "tool": {
+    "errors": {
+      "unauthorized": "Kimlik doğrulama başarısız. Geçerli bir Bearer API anahtarı sağlayın.",
+      "forbidden": "API anahtarınızın bu araç için gerekli yetki kapsamı yok.",
+      "not_found": "İstenen kayıt bulunamadı.",
+      "validation_error": "Bir veya daha fazla parametre doğrulamadan geçemedi.",
+      "conflict": "Bu benzersiz alanlarla eşleşen bir kayıt zaten var.",
+      "precondition_failed": "Kaynağın mevcut durumu bu işleme izin vermiyor.",
+      "rate_limited": "Çok fazla istek. Lütfen daha sonra tekrar deneyin.",
+      "internal_error": "Bir iç hata oluştu. Operatör bilgilendirildi.",
+      "invalid_api_key": "Sağlanan API anahtarı geçerli değil.",
+      "feature_locked": "Bu özellik mevcut planınızda kullanılamıyor.",
+      "insufficient_scope": "Bu işlem için daha geniş yetkili bir API anahtarı gerekli.",
+      "tenant_required": "Bu araç bir kiracıya bağlı API anahtarı gerektirir. Mevcut anahtar bir kiracıya bağlı değil."
+    }
+  }
+}

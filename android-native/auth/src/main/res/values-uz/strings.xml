@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="role_not_configured_title">Sizning rolingiz hali sozlanmagan</string>
+    <string name="role_not_configured_body">Administrator sizga ruxsat bermaguncha ilova xususiyatlari bloklanadi.</string>
+    <string name="role_not_configured_contact">Administrator bilan bog\'lanish</string>
+    <string name="role_not_configured_sign_out">Chiqish</string>
+    <string name="role_not_configured_contact_subject">Ilovaga kirish — rol sozlanmagan</string>
+    <string name="biometric_title">Ilovani ochish uchun shaxsingizni tasdiqlang</string>
+    <string name="biometric_button_authenticate">Tasdiqlash</string>
+    <string name="biometric_negative_signout">Chiqish</string>
+</resources>

@@ -1,0 +1,13 @@
+--swiftversion 6.0
+--indent 4
+--maxwidth 120
+--exclude build,DerivedData,.build
+--commas inline
+--exponentcase lowercase
+--ifdef no-indent
+--linebreaks lf
+--ranges spaced
+--self remove
+--trimwhitespace always
+--wraparguments before-first
+--wrapcollections before-first

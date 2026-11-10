@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<!-- Permit cleartext HTTP to localhost / .local / IP literals so DEBUG
+		     builds can talk to the local V2 dev server at http://localhost:3100.
+		     ATS stays strict for every public host; prod uses https://ishflow.com. -->
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to scan product barcodes and capture documents to attach to invoices.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>ishflow uses Face ID to unlock the app and protect your business data.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to attach photos from your library to invoices and other documents.</string>
+	<key>NSPhotoLibraryAddOnlyUsageDescription</key>
+	<string>Used to save downloaded attachments to your photo library.</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>dev.ishflow.ios</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ishflow</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleDisplayName</key>
+	<string>ishflow</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.uba.ishflow.quickaction.newSale</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>New Sale</string>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeCompose</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.uba.ishflow.quickaction.todaysAR</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Today's A/R</string>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeDate</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.uba.ishflow.quickaction.scanBarcode</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Scan Barcode</string>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeCapturePhoto</string>
+		</dict>
+	</array>
+</dict>
+</plist>

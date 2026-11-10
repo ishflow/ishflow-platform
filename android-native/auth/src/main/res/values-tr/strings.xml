@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="role_not_configured_title">Rolünüz henüz yapılandırılmadı</string>
+    <string name="role_not_configured_body">Yöneticiniz size izin verene kadar uygulama özellikleri kilitli kalacak.</string>
+    <string name="role_not_configured_contact">Yöneticiyle iletişime geç</string>
+    <string name="role_not_configured_sign_out">Çıkış yap</string>
+    <string name="role_not_configured_contact_subject">Uygulama erişimi — rol yapılandırılmadı</string>
+    <string name="biometric_title">Uygulamayı açmak için kimliğinizi doğrulayın</string>
+    <string name="biometric_button_authenticate">Doğrula</string>
+    <string name="biometric_negative_signout">Çıkış yap</string>
+</resources>

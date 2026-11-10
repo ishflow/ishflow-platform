@@ -1,0 +1,38 @@
+<resources>
+    <string name="inventory_title">Запасы</string>
+    <string name="inventory_search_hint">Поиск товаров или складов...</string>
+    <string name="product_detail_title">Товар</string>
+    <string name="warehouse_label">Склад</string>
+    <string name="quantity_label">Количество</string>
+    <string name="error_loading">Ошибка загрузки</string>
+    <string name="scan_title">Сканировать штрих-код</string>
+    <string name="scan_permission_rationale">Для сканирования штрихкодов нужно разрешение на камеру.</string>
+    <string name="barcode_permission_rationale">Для сканирования штрих-кодов нужен доступ к камере.</string>
+    <string name="barcode_permission_grant">Разрешить</string>
+    <string name="error_title">Ошибка</string>
+    <string name="action_retry">Повторить</string>
+    <string name="empty_title">Нет данных</string>
+    <string name="action_refresh">Обновить</string>
+    <string name="inventory_filter_title">Фильтр</string>
+    <string name="inventory_filter_category">Категория</string>
+    <string name="inventory_filter_group">Группа</string>
+    <string name="inventory_filter_warehouse">Склад</string>
+    <string name="inventory_filter_low_stock">Низкий остаток</string>
+    <string name="inventory_filter_apply">Применить</string>
+    <string name="inventory_filter_clear">Очистить</string>
+    <string name="inventory_filter_empty">Нет доступных значений</string>
+    <string name="product_detail_total_stock">Всего на складе</string>
+    <string name="product_detail_balance_per_warehouse">По складам</string>
+    <string name="product_detail_movements">Последние движения</string>
+    <string name="product_detail_empty_movements">Нет движений</string>
+    <string name="inventory_low_stock_badge">Низкий</string>
+    <string name="inventory_out_of_stock_badge">Нет</string>
+    <string name="inventory_empty_title">Запасов пока нет</string>
+    <string name="inventory_empty_hint">Нажмите +, чтобы записать движение</string>
+    <plurals name="inventory_warehouse_item_count">
+        <item quantity="one">%1$d товар</item>
+        <item quantity="few">%1$d товара</item>
+        <item quantity="many">%1$d товаров</item>
+        <item quantity="other">%1$d товара</item>
+    </plurals>
+</resources>

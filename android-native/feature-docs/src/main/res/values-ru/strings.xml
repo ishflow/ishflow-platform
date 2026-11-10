@@ -1,0 +1,34 @@
+<resources>
+    <string name="docs_tab_title">Документы</string>
+    <string name="docs_filter_all">Все</string>
+    <string name="docs_filter_sales">Продажи</string>
+    <string name="docs_filter_purchases">Закупки</string>
+    <string name="docs_filter_paymentReceived">Поступления</string>
+    <string name="docs_filter_paymentSent">Платежи</string>
+    <string name="docs_kind_sales">Реализация</string>
+    <string name="docs_kind_purchase">Поступление</string>
+    <string name="docs_kind_paymentReceived">Поступление средств</string>
+    <string name="docs_kind_paymentSent">Платёж</string>
+    <string name="docs_empty_title">Документов нет</string>
+    <string name="docs_error_title">Ошибка загрузки</string>
+    <string name="docs_action_retry">Повторить</string>
+    <string name="docs_action_refresh">Обновить</string>
+    <string name="docs_filter_title">Фильтр</string>
+    <string name="docs_filter_date_range">Период</string>
+    <string name="docs_filter_date_from">С</string>
+    <string name="docs_filter_date_to">По</string>
+    <string name="docs_filter_counterparty">Контрагент</string>
+    <string name="docs_filter_amount_range">Сумма</string>
+    <string name="docs_filter_amount_min">От</string>
+    <string name="docs_filter_amount_max">До</string>
+    <string name="docs_filter_status">Статус</string>
+    <string name="docs_filter_status_draft">Черновик</string>
+    <string name="docs_filter_status_posted">Проведено</string>
+    <string name="docs_filter_status_canceled">Отменено</string>
+    <string name="docs_filter_kind">Тип</string>
+    <string name="docs_filter_apply">Применить</string>
+    <string name="docs_filter_clear">Очистить</string>
+    <string name="docs_search_placeholder">Поиск по номеру или контрагенту</string>
+    <string name="docs_search_open">Открыть поиск</string>
+    <string name="docs_search_close">Закрыть поиск</string>
+</resources>

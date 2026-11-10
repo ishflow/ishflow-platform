@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="status_draft">Долбоор</string>
+    <string name="status_saved">Сакталган</string>
+    <string name="status_posted">Өткөрүлгөн</string>
+    <string name="status_cancelled">Жокко чыгарылган</string>
+    <string name="error_not_found">Табылган жок</string>
+    <string name="error_unauthorized">Сеанс аяктады. Кайра кириңиз.</string>
+    <string name="error_server">Сервер катасы. Кайра аракет кылыңыз.</string>
+    <string name="error_bad_request">Туура эмес суроо</string>
+    <string name="error_network">Интернет туташуусу жок.</string>
+    <string name="error_unknown">Бир нерсе туура эмес болду.</string>
+    <string name="error_period_closed">Бул мезгил жабылган. Ачуу үчүн администратор менен байланышыңыз.</string>
+    <string name="error_below_cost">Өткөрүү мүмкүн эмес: кеминде бир саптын баасы өздүк наркынан төмөн. Баасын жогорулатыңыз же жөндөөлөрдө өздүк наркынан төмөн сатуuga уруксат бериңиз.</string>
+    <string name="error_title">Ката</string>
+    <string name="action_retry">Кайталоо</string>
+    <string name="action_back">Артка</string>
+    <string name="action_refresh">Жаңыртуу</string>
+    <string name="action_share">Бөлүшүү</string>
+    <string name="action_close">Жабуу</string>
+    <string name="action_grant_permission">Уруксат берүү</string>
+    <string name="empty_dashboard_title">Азырынча эч нерсе жок</string>
+    <string name="empty_dashboard_message">Жаңыртуу үчүн тартыңыз же биринчи эсеп-фактураны түзүңүз.</string>
+    <string name="role_owner">Ээси</string>
+    <string name="role_administrator">Администратор</string>
+    <string name="role_chief_accountant">Башкы бухгалтер</string>
+    <string name="role_accountant">Бухгалтер</string>
+    <string name="role_cashier">Кассир</string>
+    <string name="role_manager">Сатуу менеджери</string>
+    <string name="role_buyer">Сатып алуучу</string>
+    <string name="role_warehouseman">Кампачы</string>
+    <string name="role_viewer">Карап жүрүүчү</string>
+    <string name="share_pdf">PDF бөлүшүү</string>
+    <string name="share_pdf_failed">PDF түзүү мүмкүн болмоду</string>
+    <string name="share_pdf_chooser_title">Ким менен бөлүшүү…</string>
+    <string name="doc_detail_subtitle_format">%1$s · %2$s</string>
+    <string name="doc_detail_lines_title">Саптар</string>
+    <string name="doc_detail_line_qty_price">%1$s × %2$s</string>
+    <string name="doc_detail_linked_invoices_title">Колдонулган эсеп-фактуралар</string>
+    <string name="doc_detail_linked_invoice_row">%1$s — %2$s</string>
+    <string name="doc_detail_subtotal">Аралык жыйынтык</string>
+    <string name="doc_detail_tax">Салык</string>
+    <string name="doc_detail_total_label">Жыйынтык</string>
+    <!-- Aliases for status_* — wired by T1's AppTopBar refactor. -->
+    <string name="status_pill_saved">Сакталган</string>
+    <string name="status_pill_posted">Өткөрүлгөн</string>
+    <string name="status_pill_draft">Долбоор</string>
+
+    <!-- Paper-receipt detail surface (sales / payment received / purchase / payment sent).
+         Keys mirror iOS xcstrings `docs.detail.*` (Android xml can't carry dots in names). -->
+    <string name="docs_detail_customer">Кардар</string>
+    <string name="docs_detail_supplier">Жеткирүүчү</string>
+    <string name="docs_detail_warehouse">Кампа</string>
+    <string name="docs_detail_priceType">Баа түрү</string>
+    <string name="docs_detail_subtotal">Аралык жыйынтык</string>
+    <string name="docs_detail_comment">Комментарий</string>
+    <string name="docs_detail_amount">Суммасы</string>
+    <string name="docs_detail_amount_received">Кабыл алынган сумма</string>
+    <string name="docs_detail_amount_sent">Жөнөтүлгөн сумма</string>
+    <string name="docs_detail_total">Жыйынтык</string>
+    <string name="docs_detail_total_in">Жалпы кириш</string>
+    <string name="docs_detail_total_due">Төлөнүүчү сумма</string>
+    <string name="docs_detail_total_out">Жалпы чыгыш</string>
+    <string name="docs_detail_pill_received">Өткөрүлгөн · Кабыл алынган</string>
+    <string name="docs_detail_pill_sent">Өткөрүлгөн · Жөнөтүлгөн</string>
+    <string name="docs_detail_kind_sales_invoice">Сатуу эсеп-фактурасы</string>
+    <string name="docs_detail_kind_payment_received">Кабыл алынган төлөм</string>
+    <string name="docs_detail_kind_purchase_invoice">Сатып алуу эсеп-фактурасы</string>
+    <string name="docs_detail_kind_payment_sent">Жөнөтүлгөн төлөм</string>
+    <string name="docs_detail_footer_sales">Сатып алганыңыз үчүн рахмат</string>
+    <string name="docs_detail_footer_received">Кириш кассалык ордер</string>
+    <string name="docs_detail_footer_purchase">Товар кабыл алынды</string>
+    <string name="docs_detail_footer_sent">Чыгыш кассалык ордер</string>
+
+    <!-- Shared attachment card strings (used by SalesDetailScreen, PurchaseDetailScreen,
+         GenericDocDetailScreen and any future detail screen). -->
+    <string name="attachments_title">Тиркемелер</string>
+    <string name="attachment_delete_title">Тиркемени жок кылуу?</string>
+    <string name="attachment_delete_message">Файл алынып салынат.</string>
+</resources>

@@ -1,0 +1,78 @@
+build:
+  maxIssues: 0
+  excludeCorrectable: false
+
+config:
+  validation: true
+  warningsAsErrors: false
+
+processors:
+  active: true
+
+console-reports:
+  active: true
+
+complexity:
+  active: true
+  ComplexCondition:
+    active: true
+    threshold: 4
+  LongMethod:
+    active: true
+    threshold: 60
+  LongParameterList:
+    active: true
+    functionThreshold: 8
+    constructorThreshold: 8
+  TooManyFunctions:
+    active: false  # noisy in :app + feature modules
+
+empty-blocks:
+  active: true
+  EmptyFunctionBlock:
+    active: true
+
+exceptions:
+  active: true
+  TooGenericExceptionCaught:
+    active: true
+  SwallowedException:
+    active: true
+
+naming:
+  active: true
+  ClassNaming:
+    active: true
+  FunctionNaming:
+    active: true
+    ignoreAnnotated: ['Composable']
+  VariableNaming:
+    active: true
+  PackageNaming:
+    active: true
+
+performance:
+  active: true
+
+potential-bugs:
+  active: true
+  UnsafeCallOnNullableType:
+    active: true   # forbids `!!` per spec
+
+style:
+  active: true
+  ForbiddenComment:
+    active: true
+    comments:
+      - reason: 'Forbidden TODO before MVP ship'
+        value: 'TODO:'
+  ReturnCount:
+    active: true
+    max: 4
+  WildcardImport:
+    active: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+  MagicNumber:
+    active: false  # too noisy for Compose modifier defaults; revisit per-feature

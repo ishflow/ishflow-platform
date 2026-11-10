@@ -1,0 +1,6 @@
+Operation Date,Amount,Currency,Counterparty,Counterparty Account,INN,Description
+2026-05-01,150000.00,RUB,LLC Romashka,40702810111111111111,7707083893,Payment for invoice 99 dated 28.04.2026
+2026-05-02,-30000.00,RUB,IE Ivanov,40802810999999999999,770700100100,Wire transfer to supplier
+2026-05-03,5000.55,RUB,LLC Lyutik,40702810555555555555,,Advance under contract 7
+2026-05-04,BAD,RUB,Garbage Row,,,Garbage row should be skipped
+2026-05-05,9999.99,RUB,,,7807037003,No-counterparty incoming

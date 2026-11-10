@@ -1,0 +1,23 @@
+// scripts/debug-enrich.local.mjs.example
+//
+// Local-only diagnostic for the document list enrich path.
+// Copy to `scripts/debug-enrich.local.mjs` (gitignored) and fill in your tenant.
+//
+// Usage:
+//   DATABASE_URL=$(op read "op://<vault>/<item>/local") \
+//     node scripts/debug-enrich.local.mjs
+
+import { PrismaClient } from '@prisma/client';
+
+const dbUrl = process.env.DATABASE_URL;
+if (!dbUrl) throw new Error('DATABASE_URL required');
+
+// REPLACE with the tenant id you want to debug:
+const tenantId = '00000000-0000-0000-0000-000000000000';
+
+const prisma = new PrismaClient({ datasources: { db: { url: dbUrl } } });
+
+await prisma.$transaction(async (tx) => {
+  await tx.$executeRawUnsafe(`SET LOCAL app.tenant_id = '${tenantId}'`);
+  // add probe queries here
+});

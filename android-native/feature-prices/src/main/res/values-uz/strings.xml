@@ -1,0 +1,11 @@
+<resources>
+    <string name="prices_title">Narxlar</string>
+    <string name="prices_search_hint">Narx ro\'yxatlarini qidirish...</string>
+    <string name="error_loading">Yuklab bo\'lmadi</string>
+    <string name="error_title">Xato</string>
+    <string name="action_retry">Qayta urinish</string>
+    <string name="empty_title">Ma\'lumot yo\'q</string>
+    <string name="action_refresh">Yangilash</string>
+    <string name="price_detail_title">Narx ro\'yxati</string>
+    <string name="price_code_label">Kod</string>
+</resources>

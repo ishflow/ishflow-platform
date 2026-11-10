@@ -1,0 +1,11 @@
+<resources>
+    <string name="prices_title">Баалар</string>
+    <string name="prices_search_hint">Баа тизмелерин издөө...</string>
+    <string name="error_loading">Жүктөп алуу мүмкүн болмоду</string>
+    <string name="error_title">Ката</string>
+    <string name="action_retry">Кайталоо</string>
+    <string name="empty_title">Маалымат жок</string>
+    <string name="action_refresh">Жаңылоо</string>
+    <string name="price_detail_title">Баа тизмеси</string>
+    <string name="price_code_label">Коду</string>
+</resources>

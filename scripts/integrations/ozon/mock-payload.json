@@ -1,0 +1,46 @@
+{
+  "result": {
+    "postings": [
+      {
+        "posting_number": "78901234-0001-1",
+        "in_process_at": "2026-05-13T10:22:00Z",
+        "customer": {
+          "name": "Алексей Петров",
+          "phone": "+74951234567",
+          "email": "a.petrov@example.ru"
+        },
+        "products": [
+          {
+            "sku": "BL-2024-RED",
+            "name": "Куртка Bask Light",
+            "quantity": 1,
+            "price": "12990.00"
+          },
+          {
+            "sku": "SOCKS-M-3PK",
+            "name": "Носки Falke 3 пары",
+            "quantity": 2,
+            "price": "1490.00"
+          }
+        ]
+      },
+      {
+        "posting_number": "78901234-0002-1",
+        "in_process_at": "2026-05-13T11:05:00Z",
+        "customer": {
+          "name": "Мария Иванова",
+          "phone": "+74959998877",
+          "email": "m.ivanova@example.ru"
+        },
+        "products": [
+          {
+            "sku": "BL-2024-RED",
+            "name": "Куртка Bask Light",
+            "quantity": 1,
+            "price": "12990.00"
+          }
+        ]
+      }
+    ]
+  }
+}

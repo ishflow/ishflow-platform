@@ -1,0 +1,42 @@
+name: iOS Native CI
+
+on:
+  pull_request:
+    paths:
+      - 'ios-native/**'
+      - '.github/workflows/ios-native-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'ios-native/**'
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+      - name: Install SwiftLint + SwiftFormat
+        run: brew install swiftlint swiftformat
+      - name: SwiftLint
+        run: cd ios-native && swiftlint --strict
+      - name: SwiftFormat
+        run: cd ios-native && swiftformat --lint .
+      - name: Build
+        run: |
+          cd ios-native
+          xcodebuild \
+            -workspace ishflow.xcworkspace \
+            -scheme ishflow \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
+            -derivedDataPath build \
+            build
+      - name: Unit tests
+        run: |
+          cd ios-native
+          xcodebuild test \
+            -workspace ishflow.xcworkspace \
+            -scheme ishflow \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
+            -derivedDataPath build

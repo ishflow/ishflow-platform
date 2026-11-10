@@ -1,0 +1,36 @@
+<resources>
+    <string name="inventory_title">Stok</string>
+    <string name="inventory_search_hint">Ürün veya depo ara...</string>
+    <string name="product_detail_title">Ürün</string>
+    <string name="warehouse_label">Depo</string>
+    <string name="quantity_label">Miktar</string>
+    <string name="error_loading">Yükleme hatası</string>
+    <string name="scan_title">Barkod Tara</string>
+    <string name="scan_permission_rationale">Barkodları taramak için kamera izni gerekiyor.</string>
+    <string name="barcode_permission_rationale">Barkod taraması için kamera erişimi gerekir.</string>
+    <string name="barcode_permission_grant">İzin ver</string>
+    <string name="error_title">Hata</string>
+    <string name="action_retry">Yeniden dene</string>
+    <string name="empty_title">Veri yok</string>
+    <string name="action_refresh">Yenile</string>
+    <string name="inventory_filter_title">Filtre</string>
+    <string name="inventory_filter_category">Kategori</string>
+    <string name="inventory_filter_group">Grup</string>
+    <string name="inventory_filter_warehouse">Depo</string>
+    <string name="inventory_filter_low_stock">Düşük stok</string>
+    <string name="inventory_filter_apply">Uygula</string>
+    <string name="inventory_filter_clear">Temizle</string>
+    <string name="inventory_filter_empty">Mevcut seçenek yok</string>
+    <string name="product_detail_total_stock">Stokta toplam</string>
+    <string name="product_detail_balance_per_warehouse">Depo bazında</string>
+    <string name="product_detail_movements">Son hareketler</string>
+    <string name="product_detail_empty_movements">Henüz hareket yok</string>
+    <string name="inventory_low_stock_badge">Az</string>
+    <string name="inventory_out_of_stock_badge">Yok</string>
+    <string name="inventory_empty_title">Henüz stok yok</string>
+    <string name="inventory_empty_hint">+ ile stok hareketi kaydet</string>
+    <plurals name="inventory_warehouse_item_count">
+        <item quantity="one">%1$d ürün</item>
+        <item quantity="other">%1$d ürün</item>
+    </plurals>
+</resources>

@@ -1,0 +1,36 @@
+<resources>
+    <string name="inventory_title">Калдык</string>
+    <string name="inventory_search_hint">Товарларды же кампаларды издөө...</string>
+    <string name="product_detail_title">Товар</string>
+    <string name="warehouse_label">Кампа</string>
+    <string name="quantity_label">Саны</string>
+    <string name="error_loading">Жүктөп алуу мүмкүн болмоду</string>
+    <string name="error_title">Ката</string>
+    <string name="action_retry">Кайталоо</string>
+    <string name="empty_title">Маалымат жок</string>
+    <string name="action_refresh">Жаңылоо</string>
+    <string name="scan_title">Штрих-кодду скандоо</string>
+    <string name="scan_permission_rationale">Штрих-кодду скандоо үчүн камерага уруксат берүү талап кылынат.</string>
+    <string name="barcode_permission_rationale">Штрих-кодду скандоо үчүн камерага жетүү талап кылынат.</string>
+    <string name="barcode_permission_grant">Уруксат берүү</string>
+    <string name="inventory_filter_title">Чыпкалоо</string>
+    <string name="inventory_filter_category">Категория</string>
+    <string name="inventory_filter_group">Топ</string>
+    <string name="inventory_filter_warehouse">Кампа</string>
+    <string name="inventory_filter_low_stock">Калдык аз</string>
+    <string name="inventory_filter_apply">Колдонуу</string>
+    <string name="inventory_filter_clear">Тазалоо</string>
+    <string name="inventory_filter_empty">Параметрлер жок</string>
+    <string name="product_detail_total_stock">Жалпы калдык</string>
+    <string name="product_detail_balance_per_warehouse">Кампа боюнча</string>
+    <string name="product_detail_movements">Акыркы кыймылдар</string>
+    <string name="product_detail_empty_movements">Кыймылдар жок</string>
+    <string name="inventory_low_stock_badge">Аз</string>
+    <string name="inventory_out_of_stock_badge">Жок</string>
+    <string name="inventory_empty_title">Калдык жок</string>
+    <string name="inventory_empty_hint">Кыймылды каттоо үчүн + басыңыз</string>
+    <plurals name="inventory_warehouse_item_count">
+        <item quantity="one">%1$d товар</item>
+        <item quantity="other">%1$d товар</item>
+    </plurals>
+</resources>

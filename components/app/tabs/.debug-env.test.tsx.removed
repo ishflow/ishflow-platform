@@ -1,0 +1,10 @@
+// @vitest-environment jsdom
+import { describe, expect, it } from 'vitest';
+
+describe('env', () => {
+  it('has window', () => {
+    // eslint-disable-next-line no-console
+    console.log('LOCALSTORAGE =', localStorage, Object.keys(localStorage));
+    expect(typeof window).toBe('object');
+  });
+});

@@ -1,0 +1,34 @@
+<resources>
+    <string name="docs_tab_title">Hujjatlar</string>
+    <string name="docs_filter_all">Hammasi</string>
+    <string name="docs_filter_sales">Sotuvlar</string>
+    <string name="docs_filter_purchases">Xaridlar</string>
+    <string name="docs_filter_paymentReceived">Tushumlar</string>
+    <string name="docs_filter_paymentSent">To\'lovlar</string>
+    <string name="docs_kind_sales">Sotuv hisob-fakturasi</string>
+    <string name="docs_kind_purchase">Xarid hisob-fakturasi</string>
+    <string name="docs_kind_paymentReceived">Tushum</string>
+    <string name="docs_kind_paymentSent">To\'lov</string>
+    <string name="docs_empty_title">Hujjatlar yo\'q</string>
+    <string name="docs_error_title">Yuklab bo\'lmadi</string>
+    <string name="docs_action_retry">Qayta urinish</string>
+    <string name="docs_action_refresh">Yangilash</string>
+    <string name="docs_filter_title">Filtr</string>
+    <string name="docs_filter_date_range">Sana oralig\'i</string>
+    <string name="docs_filter_date_from">Boshlanish</string>
+    <string name="docs_filter_date_to">Tugash</string>
+    <string name="docs_filter_counterparty">Kontragent</string>
+    <string name="docs_filter_amount_range">Summa oralig\'i</string>
+    <string name="docs_filter_amount_min">Eng kam</string>
+    <string name="docs_filter_amount_max">Eng ko\'p</string>
+    <string name="docs_filter_status">Holat</string>
+    <string name="docs_filter_status_draft">Qoralama</string>
+    <string name="docs_filter_status_posted">Yuborilgan</string>
+    <string name="docs_filter_status_canceled">Bekor qilingan</string>
+    <string name="docs_filter_kind">Tur</string>
+    <string name="docs_filter_apply">Qo\'llash</string>
+    <string name="docs_filter_clear">Tozalash</string>
+    <string name="docs_search_placeholder">Raqam yoki kontragent bo\'yicha qidirish</string>
+    <string name="docs_search_open">Qidirishni ochish</string>
+    <string name="docs_search_close">Qidirishni yopish</string>
+</resources>

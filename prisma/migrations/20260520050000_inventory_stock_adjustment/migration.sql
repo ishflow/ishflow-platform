@@ -1,0 +1,60 @@
+-- inventory.stock_adjustment — single-register stock adjustment with paired RLS.
+
+CREATE TABLE "document_inventory_stock_adjustment" (
+  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "tenant_id" UUID NOT NULL,
+  "number" TEXT NOT NULL,
+  "status" TEXT NOT NULL DEFAULT 'SAVED',
+  "posted_at" TIMESTAMP(3),
+  "posted_by" UUID,
+  "version" INT NOT NULL DEFAULT 0,
+  "date" TIMESTAMP(3) NOT NULL,
+  "warehouse" UUID NOT NULL,
+  "reason" TEXT,
+  "assigned_buyer_id" TEXT,
+  "created_at" TIMESTAMP(3) NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMP(3) NOT NULL,
+  "deleted_at" TIMESTAMP(3),
+  CONSTRAINT "document_inventory_stock_adjustment_tenantId_number_key" UNIQUE ("tenant_id", "number")
+);
+
+CREATE INDEX "document_inventory_stock_adjustment_tenantId_idx"
+  ON "document_inventory_stock_adjustment"("tenant_id");
+CREATE INDEX "document_inventory_stock_adjustment_tenantId_deletedAt_idx"
+  ON "document_inventory_stock_adjustment"("tenant_id", "deleted_at");
+CREATE INDEX "document_inventory_stock_adjustment_tenantId_status_idx"
+  ON "document_inventory_stock_adjustment"("tenant_id", "status");
+CREATE INDEX "document_inventory_stock_adjustment_tenantId_postedAt_idx"
+  ON "document_inventory_stock_adjustment"("tenant_id", "posted_at");
+CREATE INDEX "document_inventory_stock_adjustment_tenantId_createdAt_idx"
+  ON "document_inventory_stock_adjustment"("tenant_id", "created_at");
+
+CREATE TABLE "document_line_inventory_stock_adjustment_items" (
+  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "tenant_id" UUID NOT NULL,
+  "document_id" UUID NOT NULL,
+  "sequence" INT NOT NULL,
+  "product" UUID NOT NULL,
+  "quantity_delta" INT NOT NULL,
+  "unit_cost" DECIMAL(14,2),
+  "created_at" TIMESTAMP(3) NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMP(3) NOT NULL,
+  CONSTRAINT "docl_inv_stock_adj_items_tenantId_docId_seq_key" UNIQUE ("tenant_id", "document_id", "sequence")
+);
+
+CREATE INDEX "docl_inv_stock_adj_items_tenantId_idx"
+  ON "document_line_inventory_stock_adjustment_items"("tenant_id");
+CREATE INDEX "docl_inv_stock_adj_items_tenantId_documentId_idx"
+  ON "document_line_inventory_stock_adjustment_items"("tenant_id", "document_id");
+
+ALTER TABLE "document_inventory_stock_adjustment" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "document_inventory_stock_adjustment" FORCE ROW LEVEL SECURITY;
+CREATE POLICY "tenant_isolation" ON "document_inventory_stock_adjustment"
+  USING ("tenant_id" = current_setting('app.tenant_id', true)::uuid)
+  WITH CHECK ("tenant_id" = current_setting('app.tenant_id', true)::uuid);
+
+ALTER TABLE "document_line_inventory_stock_adjustment_items" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "document_line_inventory_stock_adjustment_items" FORCE ROW LEVEL SECURITY;
+CREATE POLICY "tenant_isolation" ON "document_line_inventory_stock_adjustment_items"
+  USING ("tenant_id" = current_setting('app.tenant_id', true)::uuid)
+  WITH CHECK ("tenant_id" = current_setting('app.tenant_id', true)::uuid);

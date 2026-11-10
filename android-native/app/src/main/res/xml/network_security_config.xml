@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Finding G-And3: cleartext HTTP is denied by default. Only the dev-flavor
+  emulator host (10.0.2.2 / localhost) is allowed, so staging/prod (which use
+  https://ishflow.com) can never fall back to cleartext (SSL-strip protection).
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">localhost</domain>
+    </domain-config>
+</network-security-config>

@@ -1,0 +1,2933 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [pgcrypto]
+}
+
+enum TenantPlan {
+  free
+  starter
+  pro
+  business
+  enterprise
+}
+
+enum TenantStatus {
+  active
+  trialing
+  past_due
+  suspended
+  cancelled
+  deleted
+}
+
+enum ScopeOperator {
+  equals
+  in_
+  contextEquals
+  currentUser
+}
+
+enum ApiKeyScope {
+  read
+  write
+  platform_admin
+
+  @@map("api_key_scope")
+}
+
+model Tenant {
+  id                   String       @id @default(uuid()) @db.Uuid
+  clerkOrgId           String       @unique @map("clerk_org_id")
+  name                 String
+  slug                 String       @unique
+  plan                 TenantPlan   @default(free)
+  status               TenantStatus @default(trialing)
+  currency             String       @default("USD")
+  defaultLocale        String       @default("ru") @map("default_locale")
+  defaultMarkupPct     Decimal      @default(0.10) @map("default_markup_pct") @db.Decimal(5, 4)
+  mobileFeatures       Json?        @map("mobile_features")
+  notificationSettings Json?        @map("notification_settings")
+  stripeCustomerId     String?      @unique @map("stripe_customer_id")
+  stripeSubscriptionId String?      @unique @map("stripe_subscription_id")
+  legalName            String?      @map("legal_name")
+  logoUrl              String?      @map("logo_url")
+  brandColor           String?      @map("brand_color")
+  archivedBy           String?      @map("archived_by") @db.Uuid
+  trialEndsAt          DateTime?    @map("trial_ends_at")
+  demoImportedAt       DateTime?    @map("demo_imported_at")
+  onboardingState      Json?        @map("onboarding_state")
+  lastActivityAt       DateTime?    @map("last_activity_at")
+  createdAt            DateTime     @default(now()) @map("created_at")
+  updatedAt            DateTime     @updatedAt @map("updated_at")
+  deletedAt            DateTime?    @map("deleted_at")
+
+  memberships          Membership[]
+  auditLogs            AuditLog[]
+  roles                Role[]
+  savedViews           SavedView[]
+  attachments          Attachment[]
+  periodCloses         PeriodClose[]
+  idempotencyKeys      IdempotencyKey[]
+  devicePushTokens     DevicePushToken[]
+  billingEvents        BillingEvent[]
+  planLimitOverrides   PlanLimitOverride[]
+  apiKeys              ApiKey[]
+  tenantAddons         TenantAddon[]
+  ocrJobs              PurchaseInvoiceOcrJob[]
+  bankAccounts         BankAccount[]
+  bankStatementImports BankStatementImport[]
+  bankStatementRows    BankStatementRow[]
+  tags                 TenantTag[]
+  notes                TenantNote[]
+  suspension           TenantSuspension?
+  featureKills         TenantFeatureKill[]
+  priceOverride        TenantPriceOverride?
+  settings             TenantSettings[]
+
+  @@map("tenant")
+}
+
+model User {
+  id        String    @id @default(uuid()) @db.Uuid
+  clerkId   String    @unique @map("clerk_id")
+  email     String    @unique
+  firstName String?   @map("first_name")
+  lastName  String?   @map("last_name")
+  imageUrl  String?   @map("image_url")
+  phone     String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  memberships      Membership[]
+  auditLogs        AuditLog[]
+  savedViews       SavedView[]
+  attachments      Attachment[]
+  closedPeriods    PeriodClose[]     @relation("PeriodCloseClosedBy")
+  devicePushTokens DevicePushToken[]
+  apiKeysCreated   ApiKey[]          @relation("ApiKeyCreatedBy")
+  settings         UserSettings[]
+
+  @@map("user")
+}
+
+model Membership {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  roles     Role[]   @relation("MembershipRoles")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId])
+  @@index([tenantId])
+  @@index([userId])
+  @@map("membership")
+}
+
+model TenantSettings {
+  tenantId  String   @map("tenant_id") @db.Uuid
+  key       String
+  payload   Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@id([tenantId, key])
+  @@map("tenant_settings")
+}
+
+model UserSettings {
+  userId    String   @map("user_id") @db.Uuid
+  key       String
+  payload   Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, key])
+  @@map("user_settings")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  entity    String
+  entityId  String   @map("entity_id")
+  action    String
+  before    Json?
+  after     Json?
+  source    String?  @db.VarChar(16)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([entity, entityId])
+  @@map("audit_log")
+}
+
+model DocumentSequence {
+  tenantId String @map("tenant_id") @db.Uuid
+  docType  String @map("doc_type")
+  prefix   String
+  next     Int    @default(1)
+
+  @@id([tenantId, docType])
+  @@map("document_sequence")
+}
+
+model Role {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String
+  description String?
+  isSystem    Boolean  @default(false) @map("is_system")
+  permissions String[] @default([])
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  scopes      RoleScope[]
+  memberships Membership[] @relation("MembershipRoles")
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@index([permissions], type: Gin)
+  @@map("role")
+}
+
+model RoleScope {
+  id        String        @id @default(uuid()) @db.Uuid
+  roleId    String        @map("role_id") @db.Uuid
+  entityId  String        @map("entity_id")
+  field     String
+  operator  ScopeOperator
+  value     Json
+  isSystem  Boolean       @default(false)
+  createdAt DateTime      @default(now()) @map("created_at")
+
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@index([roleId])
+  @@index([entityId])
+  @@map("role_scope")
+}
+
+model SavedView {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  kind      String
+  name      String
+  payload   Json
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId, kind, name])
+  @@index([tenantId, userId, kind])
+  @@index([tenantId, deletedAt])
+  @@map("saved_view")
+}
+
+model Attachment {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  entity      String
+  entityId    String    @map("entity_id") @db.Uuid
+  filename    String
+  contentType String    @map("content_type")
+  size        Int
+  objectKey   String    @unique @map("object_key")
+  uploadedBy  String    @map("uploaded_by") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  tenant      Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user        User                    @relation(fields: [uploadedBy], references: [id], onDelete: Restrict)
+  ocrJobs     PurchaseInvoiceOcrJob[]
+  bankImports BankStatementImport[]
+
+  @@index([tenantId])
+  @@index([tenantId, entity, entityId])
+  @@index([tenantId, deletedAt])
+  @@map("attachment")
+}
+
+model PeriodClose {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  module        String
+  closedThrough DateTime @map("closed_through")
+  closedBy      String   @map("closed_by") @db.Uuid
+  reason        String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation("PeriodCloseClosedBy", fields: [closedBy], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, module])
+  @@index([tenantId])
+  @@map("period_close")
+}
+
+model IdempotencyKey {
+  tenantId     String   @map("tenant_id") @db.Uuid
+  key          String   @db.Uuid
+  resourceType String   @map("resource_type")
+  resourceId   String   @map("resource_id") @db.Uuid
+  responseBody Json     @map("response_body")
+  statusCode   Int      @default(200) @map("status_code")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@id([tenantId, key])
+  @@index([tenantId, createdAt])
+  @@map("idempotency_key")
+}
+
+model DevicePushToken {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  token      String   @unique
+  platform   String
+  deviceName String?  @map("device_name")
+  createdAt  DateTime @default(now()) @map("created_at")
+  lastUsedAt DateTime @default(now()) @map("last_used_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, userId])
+  @@map("device_push_token")
+}
+
+model TenantDeletionLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantSlug String
+  tenantName String
+  deletedBy  String   @db.Uuid
+  deletedAt  DateTime @default(now())
+  metadata   Json
+
+  @@map("tenant_deletion_log")
+}
+
+model BillingEvent {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String?   @map("tenant_id") @db.Uuid
+  stripeEventId   String    @unique @map("stripe_event_id")
+  type            String
+  payload         Json
+  processedAt     DateTime? @map("processed_at")
+  processingError String?   @map("processing_error")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@index([type, createdAt])
+  @@map("billing_event")
+}
+
+model PlanLimitOverride {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  key       String
+  value     Int
+  expiresAt DateTime? @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String    @map("created_by") @db.Uuid
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, key])
+  @@index([tenantId])
+  @@map("plan_limit_override")
+}
+
+/// Global (tenant-independent) feature toggle. Managed by platform operators in
+/// the super-admin "Features" page. A key absent from this table is treated as
+/// OFF; the seed writes every current nav feature ON so rollout is invisible.
+/// No tenantId / no RLS — global config reachable only through super-admin code.
+model FeatureFlag {
+  key         String   @id
+  enabled     Boolean  @default(false)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedById String?  @map("updated_by_id") @db.Uuid
+
+  @@map("feature_flag")
+}
+
+model ApiKey {
+  id          String      @id @default(uuid()) @db.Uuid
+  tenantId    String      @map("tenant_id") @db.Uuid
+  name        String
+  keyPrefix   String      @unique @map("key_prefix")
+  keyHash     String      @map("key_hash")
+  scope       ApiKeyScope @default(read)
+  lastUsedAt  DateTime?   @map("last_used_at")
+  revokedAt   DateTime?   @map("revoked_at")
+  expiresAt   DateTime?   @map("expires_at")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  createdById String      @map("created_by_id") @db.Uuid
+
+  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdBy User   @relation("ApiKeyCreatedBy", fields: [createdById], references: [id])
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@index([keyPrefix])
+  @@map("api_key")
+}
+
+// <generator:start>
+model Catalog_inventory_product {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  categoryId  String?   @map("category_id") @db.Uuid // ref -> inventory.product_category
+  groupId     String?   @map("group_id") @db.Uuid // ref -> inventory.product_group
+  barcode     String?
+  externalId  String?
+  unit        String?
+  costPrice   Decimal?  @map("cost_price") @db.Decimal(14, 2)
+  listPrice   Decimal?  @map("list_price") @db.Decimal(14, 2)
+  minStock    Decimal?  @map("min_stock") @db.Decimal(14, 3)
+  maxStock    Decimal?  @map("max_stock") @db.Decimal(14, 3)
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, name])
+  @@index([tenantId, categoryId])
+  @@index([tenantId, groupId])
+  @@index([tenantId, barcode])
+  @@map("catalog_inventory_product")
+}
+
+model Catalog_inventory_product_category {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  description String?   @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, name])
+  @@map("catalog_inventory_product_category")
+}
+
+model Catalog_inventory_product_group {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  description String?   @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, name])
+  @@map("catalog_inventory_product_group")
+}
+
+model Catalog_inventory_warehouse {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  code      String
+  name      String
+  address   String?   @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, name])
+  @@map("catalog_inventory_warehouse")
+}
+
+model Catalog_purchases_supplier {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  code            String
+  name            String
+  email           String?
+  phone           String?
+  notes           String?   @db.Text
+  externalId      String?
+  assignedBuyerId String?   @map("assigned_buyer_id") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, name])
+  @@index([tenantId, assignedBuyerId])
+  @@map("catalog_purchases_supplier")
+}
+
+model Catalog_sales_customer {
+  id               String    @id @default(uuid()) @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  code             String
+  name             String
+  email            String?
+  phone            String?
+  notes            String?   @db.Text
+  defaultPriceType String?   @map("default_price_type") @db.Uuid // ref -> sales.price_type
+  assignedRepId    String?
+  externalId       String?
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, name])
+  @@index([tenantId, assignedRepId])
+  @@map("catalog_sales_customer")
+}
+
+model Catalog_sales_price_agreement {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  code         String
+  counterparty String    @db.Uuid // ref -> sales.customer
+  product      String    @db.Uuid // ref -> inventory.product
+  fixedPrice   Decimal   @db.Decimal(14, 2)
+  validFrom    DateTime
+  validTo      DateTime?
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, createdAt])
+  @@map("catalog_sales_price_agreement")
+}
+
+model Catalog_sales_price_type {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  code          String
+  name          String
+  kind          String
+  description   String?   @db.Text
+  basePriceType String?   @map("base_price_type_id") @db.Uuid // ref -> sales.price_type
+  markupPct     Decimal?  @db.Decimal(5, 4)
+  isDefault     Boolean?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, name])
+  @@map("catalog_sales_price_type")
+}
+
+model Document_inventory_price_setting {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  number    String
+  status    String    @default("SAVED")
+  postedAt  DateTime? @map("posted_at")
+  postedBy  String?   @map("posted_by") @db.Uuid
+  version   Int       @default(0)
+  date      DateTime
+  priceType String    @db.Uuid // ref -> sales.price_type
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@map("document_inventory_price_setting")
+}
+
+model DocumentLine_inventory_price_setting_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid // ref -> inventory.product
+  price      Decimal  @db.Decimal(14, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_inventory_price_setting_items")
+}
+
+model Document_purchases_invoice {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  supplier        String    @db.Uuid // ref -> purchases.supplier
+  warehouse       String    @db.Uuid // ref -> inventory.warehouse
+  assignedBuyerId String?   @map("assigned_buyer_id") @db.Uuid
+  supplierDocNo   String?   @map("supplier_doc_no")
+  paymentTerms    String?   @map("payment_terms")
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, assignedBuyerId])
+  @@map("document_purchases_invoice")
+}
+
+model DocumentLine_purchases_invoice_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid // ref -> inventory.product
+  quantity   Int
+  price      Decimal  @db.Decimal(14, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_purchases_invoice_items")
+}
+
+model Document_purchases_return_purchase {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  supplier        String    @db.Uuid
+  warehouse       String    @db.Uuid
+  originalInvoice String?   @map("original_invoice") @db.Uuid
+  reason          String?   @db.Text
+  supplierDocNo   String?   @map("supplier_doc_no")
+  assignedBuyerId String?   @map("assigned_buyer_id")
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@map("document_purchases_return_purchase")
+}
+
+model DocumentLine_purchases_return_purchase_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  price      Decimal  @db.Decimal(14, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_purchases_return_purchase_items")
+}
+
+model Document_purchases_payment_sent {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  supplier        String    @db.Uuid // ref -> purchases.supplier
+  cashRegister    String?   @map("cash_register") @db.Uuid // ref -> treasury.cash_register
+  amount          Decimal   @db.Decimal(14, 2)
+  linkedInvoices  String?   @db.Text
+  note            String?   @db.Text
+  assignedBuyerId String?   @map("assigned_buyer_id") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, assignedBuyerId])
+  @@index([tenantId, cashRegister])
+  @@map("document_purchases_payment_sent")
+}
+
+model Document_sales_invoice {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  number        String
+  status        String    @default("SAVED")
+  postedAt      DateTime? @map("posted_at")
+  postedBy      String?   @map("posted_by") @db.Uuid
+  version       Int       @default(0)
+  date          DateTime
+  customer      String    @db.Uuid // ref -> sales.customer
+  priceType     String?   @db.Uuid // ref -> sales.price_type
+  warehouse     String    @db.Uuid // ref -> inventory.warehouse
+  assignedRepId String?
+  notes         String?   @db.Text
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, assignedRepId])
+  @@map("document_sales_invoice")
+}
+
+model DocumentLine_sales_invoice_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid // ref -> inventory.product
+  quantity   Int
+  price      Decimal  @db.Decimal(14, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_sales_invoice_items")
+}
+
+model Document_sales_payment_received {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  number         String
+  status         String    @default("SAVED")
+  postedAt       DateTime? @map("posted_at")
+  postedBy       String?   @map("posted_by") @db.Uuid
+  version        Int       @default(0)
+  date           DateTime
+  customer       String    @db.Uuid // ref -> sales.customer
+  cashRegister   String?   @map("cash_register") @db.Uuid // ref -> treasury.cash_register
+  amount         Decimal   @db.Decimal(14, 2)
+  linkedInvoices String?   @db.Text
+  note           String?   @db.Text
+  assignedRepId  String?
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, assignedRepId])
+  @@index([tenantId, cashRegister])
+  @@map("document_sales_payment_received")
+}
+
+model Register_inventory_product_price {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  period       DateTime  @db.Date
+  product      String    @db.Uuid // ref -> inventory.product
+  priceType    String    @db.Uuid // ref -> sales.price_type
+  price        Decimal   @db.Decimal(18, 4)
+  docRef       String?   @map("doc_ref") @db.Uuid
+  recorderType String?   @map("recorder_type")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@index([tenantId, product, priceType, period(sort: Desc)])
+  @@index([tenantId, docRef])
+  @@map("register_inventory_product_price")
+}
+
+model Movement_inventory_stock_balance {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  docRef    String   @map("doc_ref") @db.Uuid
+  docType   String   @map("doc_type")
+  kind      String
+  active    Boolean  @default(true)
+  timestamp DateTime
+  warehouse String   @db.Uuid // ref -> inventory.warehouse
+  product   String   @db.Uuid // ref -> inventory.product
+  quantity  Int
+  totalCost Decimal  @db.Decimal(14, 2)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, active])
+  @@index([tenantId, docRef])
+  @@index([tenantId, active, timestamp])
+  @@index([tenantId, warehouse, product, timestamp])
+  @@map("movement_inventory_stock_balance")
+}
+
+model Movement_purchases_accounts_payable {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  docRef        String   @map("doc_ref") @db.Uuid
+  docType       String   @map("doc_type")
+  kind          String
+  active        Boolean  @default(true)
+  timestamp     DateTime
+  supplier      String   @db.Uuid // ref -> purchases.supplier
+  relatedDocRef String?  @db.Uuid
+  amount        Decimal  @db.Decimal(14, 2)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, active])
+  @@index([tenantId, docRef])
+  @@index([tenantId, active, timestamp])
+  @@index([tenantId, supplier, relatedDocRef, timestamp])
+  @@map("movement_purchases_accounts_payable")
+}
+
+model Movement_sales_accounts_receivable {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  docRef        String   @map("doc_ref") @db.Uuid
+  docType       String   @map("doc_type")
+  kind          String
+  active        Boolean  @default(true)
+  timestamp     DateTime
+  customer      String   @db.Uuid // ref -> sales.customer
+  relatedDocRef String?  @db.Uuid
+  amount        Decimal  @db.Decimal(14, 2)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, active])
+  @@index([tenantId, docRef])
+  @@index([tenantId, active, timestamp])
+  @@index([tenantId, customer, relatedDocRef, timestamp])
+  @@map("movement_sales_accounts_receivable")
+}
+
+model Movement_finance_vat {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  docRef    String   @map("doc_ref") @db.Uuid
+  docType   String   @map("doc_type")
+  kind      String
+  active    Boolean  @default(true)
+  timestamp DateTime
+  counterparty String?
+  relatedDocRef String?
+  amount    Decimal  @db.Decimal(14, 2)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, active])
+  @@index([tenantId, docRef])
+  @@index([tenantId, active, timestamp])
+  @@index([tenantId, counterparty, relatedDocRef, timestamp])
+  @@map("movement_finance_vat")
+}
+
+model Movement_sales_sale {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  docRef       String   @map("doc_ref") @db.Uuid
+  docType      String   @map("doc_type")
+  kind         String
+  active       Boolean  @default(true)
+  timestamp    DateTime
+  counterparty String   @db.Uuid // ref -> sales.customer
+  product      String   @db.Uuid // ref -> inventory.product
+  quantity     Int
+  cost         Decimal  @db.Decimal(14, 2)
+  revenue      Decimal  @db.Decimal(14, 2)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, active])
+  @@index([tenantId, docRef])
+  @@index([tenantId, active, timestamp])
+  @@index([tenantId, counterparty, product, timestamp])
+  @@map("movement_sales_sale")
+}
+
+// Phase 2 additional 1C documents — hand-written models (kept outside the
+// generator block to survive `pnpm generate`). DSL configs live under
+// configs/sales/documents/, configs/purchases/documents/,
+// configs/treasury/documents/.
+
+model Document_sales_order {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  number         String
+  status         String    @default("SAVED")
+  postedAt       DateTime? @map("posted_at")
+  postedBy       String?   @map("posted_by") @db.Uuid
+  version        Int       @default(0)
+  date           DateTime
+  customer       String    @db.Uuid // ref -> sales.customer
+  warehouse      String    @db.Uuid // ref -> inventory.warehouse
+  expectedDate   DateTime? @map("expected_date")
+  workflowStatus String    @default("open") @map("workflow_status")
+  assignedRepId  String?   @map("assigned_rep_id")
+  notes          String?   @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, customer])
+  @@map("document_sales_order")
+}
+
+model DocumentLine_sales_order_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  price      Decimal  @db.Decimal(14, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_sales_order_items")
+}
+
+model Document_sales_invoice_for_payment {
+  id               String    @id @default(uuid()) @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  number           String
+  status           String    @default("SAVED")
+  postedAt         DateTime? @map("posted_at")
+  postedBy         String?   @map("posted_by") @db.Uuid
+  version          Int       @default(0)
+  date             DateTime
+  customer         String    @db.Uuid
+  dueDate          DateTime? @map("due_date")
+  workflowStatus   String    @default("issued") @map("workflow_status")
+  assignedRepId    String?   @map("assigned_rep_id")
+  linkedSalesOrder String?   @map("linked_sales_order") @db.Uuid
+  notes            String?   @db.Text
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, customer])
+  @@index([tenantId, linkedSalesOrder])
+  @@map("document_sales_invoice_for_payment")
+}
+
+model DocumentLine_sales_invoice_for_payment_items {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  documentId  String   @map("document_id") @db.Uuid
+  sequence    Int
+  product     String?  @db.Uuid
+  description String?
+  quantity    Int
+  price       Decimal  @db.Decimal(14, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_sales_invoice_for_payment_items")
+}
+
+model Document_purchases_order {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  supplier        String    @db.Uuid
+  warehouse       String    @db.Uuid
+  expectedDate    DateTime? @map("expected_date")
+  workflowStatus  String    @default("open") @map("workflow_status")
+  assignedBuyerId String?   @map("assigned_buyer_id")
+  supplierDocNo   String?   @map("supplier_doc_no")
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, supplier])
+  @@map("document_purchases_order")
+}
+
+model DocumentLine_purchases_order_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  price      Decimal  @db.Decimal(14, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_purchases_order_items")
+}
+
+model Document_treasury_debt_adjustment {
+  id                 String    @id @default(uuid()) @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  number             String
+  status             String    @default("SAVED")
+  postedAt           DateTime? @map("posted_at")
+  postedBy           String?   @map("posted_by") @db.Uuid
+  version            Int       @default(0)
+  date               DateTime
+  kind               String // 'netting' | 'writeoff' | 'transfer'
+  counterparty       String    @db.Uuid
+  counterpartyKind   String    @map("counterparty_kind") // 'customer' | 'supplier'
+  counterpartyTo     String?   @map("counterparty_to") @db.Uuid
+  counterpartyToKind String?   @map("counterparty_to_kind")
+  reason             String?   @db.Text
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, counterparty])
+  @@map("document_treasury_debt_adjustment")
+}
+
+model DocumentLine_treasury_debt_adjustment_items {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  documentId      String   @map("document_id") @db.Uuid
+  sequence        Int
+  originalDocRef  String   @map("original_doc_ref") @db.Uuid
+  originalDocType String   @map("original_doc_type")
+  amount          Decimal  @db.Decimal(14, 2)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_treasury_debt_adjustment_items")
+}
+
+model Movement_sales_reserved_stock {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  docRef    String   @map("doc_ref") @db.Uuid
+  docType   String   @map("doc_type")
+  kind      String // 'income' | 'expense'
+  active    Boolean  @default(true)
+  timestamp DateTime
+  warehouse String   @db.Uuid
+  product   String   @db.Uuid
+  customer  String   @db.Uuid
+  quantity  Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, active])
+  @@index([tenantId, docRef])
+  @@index([tenantId, active, warehouse, product])
+  @@index([tenantId, active, customer, timestamp])
+  @@map("movement_sales_reserved_stock")
+}
+
+model Document_treasury_expense_report {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  number       String
+  status       String    @default("SAVED")
+  postedAt     DateTime? @map("posted_at")
+  postedBy     String?   @map("posted_by") @db.Uuid
+  version      Int       @default(0)
+  date         DateTime
+  employee     String?
+  cashRegister String?   @map("cash_register") @db.Uuid
+  purpose      String?
+  notes        String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, cashRegister])
+  @@map("document_treasury_expense_report")
+}
+
+model DocumentLine_treasury_expense_report_items {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  documentId  String   @map("document_id") @db.Uuid
+  sequence    Int
+  category    String?
+  description String?
+  amount      Decimal  @db.Decimal(14, 2)
+  receipt     String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_treasury_expense_report_items")
+}
+
+model Document_sales_service_sale {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  number        String
+  status        String    @default("SAVED")
+  postedAt      DateTime? @map("posted_at")
+  postedBy      String?   @map("posted_by") @db.Uuid
+  version       Int       @default(0)
+  date          DateTime
+  customer      String    @db.Uuid
+  assignedRepId String?   @map("assigned_rep_id")
+  notes         String?   @db.Text
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, customer])
+  @@map("document_sales_service_sale")
+}
+
+model DocumentLine_sales_service_sale_items {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  documentId  String   @map("document_id") @db.Uuid
+  sequence    Int
+  description String
+  quantity    Int      @default(1)
+  price       Decimal  @db.Decimal(14, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_sales_service_sale_items")
+}
+
+model Document_purchases_service_receipt {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  supplier        String    @db.Uuid
+  supplierDocNo   String?   @map("supplier_doc_no")
+  assignedBuyerId String?   @map("assigned_buyer_id") @db.Uuid
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, supplier])
+  @@map("document_purchases_service_receipt")
+}
+
+model DocumentLine_purchases_service_receipt_items {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  documentId  String   @map("document_id") @db.Uuid
+  sequence    Int
+  description String
+  quantity    Int      @default(1)
+  price       Decimal  @db.Decimal(14, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_purchases_service_receipt_items")
+}
+
+model Document_sales_retail_sale {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  number       String
+  status       String    @default("SAVED")
+  postedAt     DateTime? @map("posted_at")
+  postedBy     String?   @map("posted_by") @db.Uuid
+  version      Int       @default(0)
+  date         DateTime
+  warehouse    String    @db.Uuid
+  cashRegister String?   @map("cash_register") @db.Uuid
+  notes        String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, warehouse])
+  @@index([tenantId, cashRegister])
+  @@map("document_sales_retail_sale")
+}
+
+model DocumentLine_sales_retail_sale_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  price      Decimal  @db.Decimal(14, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_sales_retail_sale_items")
+}
+
+model Document_treasury_cash_transfer {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  number      String
+  status      String    @default("SAVED")
+  postedAt    DateTime? @map("posted_at")
+  postedBy    String?   @map("posted_by") @db.Uuid
+  version     Int       @default(0)
+  date        DateTime
+  fromCashReg String    @map("from_cash_reg") @db.Uuid
+  toCashReg   String    @map("to_cash_reg") @db.Uuid
+  amount      Decimal   @db.Decimal(14, 2)
+  notes       String?   @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, fromCashReg])
+  @@index([tenantId, toCashReg])
+  @@map("document_treasury_cash_transfer")
+}
+
+model Document_sales_refund_payment {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  number       String
+  status       String    @default("SAVED")
+  postedAt     DateTime? @map("posted_at")
+  postedBy     String?   @map("posted_by") @db.Uuid
+  version      Int       @default(0)
+  date         DateTime
+  customer     String    @db.Uuid
+  cashRegister String?   @map("cash_register") @db.Uuid
+  amount       Decimal   @db.Decimal(14, 2)
+  reason       String?
+  notes        String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, customer])
+  @@map("document_sales_refund_payment")
+}
+
+model Document_purchases_refund_received {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  number       String
+  status       String    @default("SAVED")
+  postedAt     DateTime? @map("posted_at")
+  postedBy     String?   @map("posted_by") @db.Uuid
+  version      Int       @default(0)
+  date         DateTime
+  supplier     String    @db.Uuid
+  cashRegister String?   @map("cash_register") @db.Uuid
+  amount       Decimal   @db.Decimal(14, 2)
+  reason       String?
+  notes        String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, supplier])
+  @@map("document_purchases_refund_received")
+}
+
+model Document_inventory_production_report {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  warehouse       String    @db.Uuid
+  finishedProduct String    @map("finished_product") @db.Uuid
+  finishedQty     Int       @map("finished_qty")
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, warehouse])
+  @@index([tenantId, finishedProduct])
+  @@map("document_inventory_production_report")
+}
+
+model DocumentLine_inventory_production_report_materials {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence], map: "doc_line_inv_prod_rep_mat_t_d_s_key")
+  @@index([tenantId], map: "doc_line_inv_prod_rep_mat_t_idx")
+  @@index([tenantId, documentId], map: "doc_line_inv_prod_rep_mat_t_d_idx")
+  @@map("document_line_inventory_production_report_materials")
+}
+
+model Document_treasury_bank_deposit {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  number       String
+  status       String    @default("SAVED")
+  postedAt     DateTime? @map("posted_at")
+  postedBy     String?   @map("posted_by") @db.Uuid
+  version      Int       @default(0)
+  date         DateTime
+  cashRegister String    @map("cash_register") @db.Uuid
+  bankAccount  String    @map("bank_account") @db.Uuid
+  amount       Decimal   @db.Decimal(14, 2)
+  notes        String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, cashRegister])
+  @@index([tenantId, bankAccount])
+  @@map("document_treasury_bank_deposit")
+}
+
+model Document_treasury_bank_withdrawal {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  number       String
+  status       String    @default("SAVED")
+  postedAt     DateTime? @map("posted_at")
+  postedBy     String?   @map("posted_by") @db.Uuid
+  version      Int       @default(0)
+  date         DateTime
+  bankAccount  String    @map("bank_account") @db.Uuid
+  cashRegister String    @map("cash_register") @db.Uuid
+  amount       Decimal   @db.Decimal(14, 2)
+  notes        String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, bankAccount])
+  @@index([tenantId, cashRegister])
+  @@map("document_treasury_bank_withdrawal")
+}
+
+model Document_inventory_assembly {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  warehouse       String    @db.Uuid
+  finishedProduct String    @map("finished_product") @db.Uuid
+  finishedQty     Int       @map("finished_qty")
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, warehouse])
+  @@index([tenantId, finishedProduct])
+  @@map("document_inventory_assembly")
+}
+
+model DocumentLine_inventory_assembly_components {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence], map: "doc_line_inv_assembly_comp_t_d_s_key")
+  @@index([tenantId], map: "doc_line_inv_assembly_comp_t_idx")
+  @@index([tenantId, documentId], map: "doc_line_inv_assembly_comp_t_d_idx")
+  @@map("document_line_inventory_assembly_components")
+}
+
+model Document_inventory_disassembly {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  number        String
+  status        String    @default("SAVED")
+  postedAt      DateTime? @map("posted_at")
+  postedBy      String?   @map("posted_by") @db.Uuid
+  version       Int       @default(0)
+  date          DateTime
+  warehouse     String    @db.Uuid
+  sourceProduct String    @map("source_product") @db.Uuid
+  sourceQty     Int       @map("source_qty")
+  notes         String?   @db.Text
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, warehouse])
+  @@index([tenantId, sourceProduct])
+  @@map("document_inventory_disassembly")
+}
+
+model DocumentLine_inventory_disassembly_components {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence], map: "doc_line_inv_disasm_comp_t_d_s_key")
+  @@index([tenantId], map: "doc_line_inv_disasm_comp_t_idx")
+  @@index([tenantId, documentId], map: "doc_line_inv_disasm_comp_t_d_idx")
+  @@map("document_line_inventory_disassembly_components")
+}
+
+model Movement_treasury_bank_funds {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  docRef        String   @map("doc_ref") @db.Uuid
+  docType       String   @map("doc_type")
+  kind          String
+  active        Boolean  @default(true)
+  timestamp     DateTime
+  bankAccount   String   @map("bank_account") @db.Uuid
+  relatedDocRef String?  @map("related_doc_ref") @db.Uuid
+  amount        Decimal  @db.Decimal(14, 2)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, active])
+  @@index([tenantId, docRef])
+  @@index([tenantId, active, timestamp])
+  @@index([tenantId, bankAccount, timestamp])
+  @@map("movement_treasury_bank_funds")
+}
+
+model Document_purchases_bank_payment {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  supplier        String    @db.Uuid
+  bankAccount     String    @map("bank_account") @db.Uuid
+  amount          Decimal   @db.Decimal(14, 2)
+  linkedInvoices  String?   @map("linked_invoices") @db.Text
+  notes           String?   @db.Text
+  assignedBuyerId String?   @map("assigned_buyer_id") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, supplier])
+  @@index([tenantId, bankAccount])
+  @@map("document_purchases_bank_payment")
+}
+
+model Document_sales_bank_receipt {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  number         String
+  status         String    @default("SAVED")
+  postedAt       DateTime? @map("posted_at")
+  postedBy       String?   @map("posted_by") @db.Uuid
+  version        Int       @default(0)
+  date           DateTime
+  customer       String    @db.Uuid
+  bankAccount    String    @map("bank_account") @db.Uuid
+  amount         Decimal   @db.Decimal(14, 2)
+  linkedInvoices String?   @map("linked_invoices") @db.Text
+  notes          String?   @db.Text
+  assignedRepId  String?   @map("assigned_rep_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, customer])
+  @@index([tenantId, bankAccount])
+  @@map("document_sales_bank_receipt")
+}
+
+model Document_treasury_bank_transfer {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  number    String
+  status    String    @default("SAVED")
+  postedAt  DateTime? @map("posted_at")
+  postedBy  String?   @map("posted_by") @db.Uuid
+  version   Int       @default(0)
+  date      DateTime
+  fromBank  String    @map("from_bank") @db.Uuid
+  toBank    String    @map("to_bank") @db.Uuid
+  amount    Decimal   @db.Decimal(14, 2)
+  notes     String?   @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, fromBank])
+  @@index([tenantId, toBank])
+  @@map("document_treasury_bank_transfer")
+}
+
+model Document_purchases_payment_request {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  number         String
+  status         String    @default("SAVED")
+  postedAt       DateTime? @map("posted_at")
+  postedBy       String?   @map("posted_by") @db.Uuid
+  version        Int       @default(0)
+  date           DateTime
+  supplier       String    @db.Uuid
+  amount         Decimal   @db.Decimal(14, 2)
+  dueDate        DateTime? @map("due_date")
+  workflowStatus String    @default("draft") @map("workflow_status")
+  requestedBy    String?   @map("requested_by")
+  approvedBy     String?   @map("approved_by")
+  approvedAt     DateTime? @map("approved_at")
+  reason         String?
+  notes          String?   @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, supplier])
+  @@index([tenantId, dueDate])
+  @@map("document_purchases_payment_request")
+}
+
+model Document_sales_commercial_offer {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  number         String
+  status         String    @default("SAVED")
+  postedAt       DateTime? @map("posted_at")
+  postedBy       String?   @map("posted_by") @db.Uuid
+  version        Int       @default(0)
+  date           DateTime
+  customer       String    @db.Uuid
+  validUntil     DateTime? @map("valid_until")
+  workflowStatus String    @default("draft") @map("workflow_status")
+  assignedRepId  String?   @map("assigned_rep_id")
+  notes          String?   @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, customer])
+  @@map("document_sales_commercial_offer")
+}
+
+model DocumentLine_sales_commercial_offer_items {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  documentId  String   @map("document_id") @db.Uuid
+  sequence    Int
+  product     String?  @db.Uuid
+  description String?
+  quantity    Int      @default(1)
+  price       Decimal  @db.Decimal(14, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence], map: "doc_line_s_co_t_d_s_key")
+  @@index([tenantId], map: "doc_line_s_co_t_idx")
+  @@index([tenantId, documentId], map: "doc_line_s_co_t_d_idx")
+  @@map("document_line_sales_commercial_offer_items")
+}
+
+model Document_treasury_payment_order {
+  id                 String    @id @default(uuid()) @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  number             String
+  status             String    @default("SAVED")
+  postedAt           DateTime? @map("posted_at")
+  postedBy           String?   @map("posted_by") @db.Uuid
+  version            Int       @default(0)
+  date               DateTime
+  bankAccount        String    @map("bank_account") @db.Uuid
+  recipientName      String    @map("recipient_name")
+  recipientAccountNo String?   @map("recipient_account_no")
+  recipientBic       String?   @map("recipient_bic")
+  recipientInn       String?   @map("recipient_inn")
+  amount             Decimal   @db.Decimal(14, 2)
+  purpose            String?
+  workflowStatus     String    @default("issued") @map("workflow_status")
+  linkedRequest      String?   @map("linked_request") @db.Uuid
+  notes              String?   @db.Text
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, bankAccount])
+  @@map("document_treasury_payment_order")
+}
+
+model Document_inventory_material_request {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  number         String
+  status         String    @default("SAVED")
+  postedAt       DateTime? @map("posted_at")
+  postedBy       String?   @map("posted_by") @db.Uuid
+  version        Int       @default(0)
+  date           DateTime
+  warehouse      String    @db.Uuid
+  workflowStatus String    @default("draft") @map("workflow_status")
+  requestedBy    String?   @map("requested_by")
+  reason         String?
+  notes          String?   @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, warehouse])
+  @@map("document_inventory_material_request")
+}
+
+model DocumentLine_inventory_material_request_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence], map: "doc_line_i_mr_t_d_s_key")
+  @@index([tenantId], map: "doc_line_i_mr_t_idx")
+  @@index([tenantId, documentId], map: "doc_line_i_mr_t_d_idx")
+  @@map("document_line_inventory_material_request_items")
+}
+
+model Document_sales_delivery_note {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  number         String
+  status         String    @default("SAVED")
+  postedAt       DateTime? @map("posted_at")
+  postedBy       String?   @map("posted_by") @db.Uuid
+  version        Int       @default(0)
+  date           DateTime
+  customer       String    @db.Uuid
+  warehouse      String    @db.Uuid
+  linkedInvoice  String?   @map("linked_invoice") @db.Uuid
+  driverName     String?   @map("driver_name")
+  vehiclePlate   String?   @map("vehicle_plate")
+  workflowStatus String    @default("issued") @map("workflow_status")
+  assignedRepId  String?   @map("assigned_rep_id")
+  notes          String?   @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, customer])
+  @@index([tenantId, warehouse])
+  @@index([tenantId, linkedInvoice])
+  @@map("document_sales_delivery_note")
+}
+
+model DocumentLine_sales_delivery_note_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence], map: "doc_line_s_dn_t_d_s_key")
+  @@index([tenantId], map: "doc_line_s_dn_t_idx")
+  @@index([tenantId, documentId], map: "doc_line_s_dn_t_d_idx")
+  @@map("document_line_sales_delivery_note_items")
+}
+
+model Document_purchases_receipt_act {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  supplier        String    @db.Uuid
+  warehouse       String    @db.Uuid
+  linkedInvoice   String?   @map("linked_invoice") @db.Uuid
+  inspectorName   String?   @map("inspector_name")
+  acceptanceNotes String?   @map("acceptance_notes") @db.Text
+  workflowStatus  String    @default("draft") @map("workflow_status")
+  assignedBuyerId String?   @map("assigned_buyer_id") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, supplier])
+  @@index([tenantId, warehouse])
+  @@index([tenantId, linkedInvoice])
+  @@map("document_purchases_receipt_act")
+}
+
+model DocumentLine_purchases_receipt_act_items {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  documentId      String   @map("document_id") @db.Uuid
+  sequence        Int
+  product         String   @db.Uuid
+  expectedQty     Int      @map("expected_qty")
+  acceptedQty     Int      @map("accepted_qty")
+  discrepancyNote String?  @map("discrepancy_note")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence], map: "doc_line_p_ra_t_d_s_key")
+  @@index([tenantId], map: "doc_line_p_ra_t_idx")
+  @@index([tenantId, documentId], map: "doc_line_p_ra_t_d_idx")
+  @@map("document_line_purchases_receipt_act_items")
+}
+
+model Document_inventory_write_off_act {
+  id                String    @id @default(uuid()) @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  number            String
+  status            String    @default("SAVED")
+  postedAt          DateTime? @map("posted_at")
+  postedBy          String?   @map("posted_by") @db.Uuid
+  version           Int       @default(0)
+  date              DateTime
+  warehouse         String    @db.Uuid
+  reasonCode        String?   @map("reason_code") // damage | loss | expired | internal_use | other
+  reason            String?   @db.Text
+  commissionMembers String?   @map("commission_members") @db.Text // JSON array of member names
+  workflowStatus    String    @default("draft") @map("workflow_status")
+  approvedBy        String?   @map("approved_by")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+  deletedAt         DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, warehouse])
+  @@index([tenantId, reasonCode])
+  @@map("document_inventory_write_off_act")
+}
+
+model DocumentLine_inventory_write_off_act_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence], map: "doc_line_i_woa_t_d_s_key")
+  @@index([tenantId], map: "doc_line_i_woa_t_idx")
+  @@index([tenantId, documentId], map: "doc_line_i_woa_t_d_idx")
+  @@map("document_line_inventory_write_off_act_items")
+}
+
+model Document_inventory_repricing {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  number         String
+  status         String    @default("SAVED")
+  postedAt       DateTime? @map("posted_at")
+  postedBy       String?   @map("posted_by") @db.Uuid
+  version        Int       @default(0)
+  date           DateTime
+  warehouse      String    @db.Uuid
+  reason         String?   @db.Text
+  workflowStatus String    @default("draft") @map("workflow_status")
+  approvedBy     String?   @map("approved_by")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, warehouse])
+  @@map("document_inventory_repricing")
+}
+
+model DocumentLine_inventory_repricing_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  oldCost    Decimal  @map("old_cost") @db.Decimal(14, 2)
+  newCost    Decimal  @map("new_cost") @db.Decimal(14, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence], map: "doc_line_i_rep_t_d_s_key")
+  @@index([tenantId], map: "doc_line_i_rep_t_idx")
+  @@index([tenantId, documentId], map: "doc_line_i_rep_t_d_idx")
+  @@map("document_line_inventory_repricing_items")
+}
+
+model Catalog_assets_fixed_asset {
+  id                 String    @id @default(uuid()) @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  code               String
+  name               String
+  inventoryNumber    String?   @map("inventory_number")
+  category           String?
+  manufacturer       String?
+  serialNumber       String?   @map("serial_number")
+  acquisitionDate    DateTime? @map("acquisition_date")
+  acquisitionCost    Decimal?  @map("acquisition_cost") @db.Decimal(14, 2)
+  usefulLifeMonths   Int?      @map("useful_life_months")
+  depreciationMethod String?   @map("depreciation_method") // 'linear' | 'declining' | 'units'
+  status             String    @default("registered") // registered | in_use | disposed
+  location           String?
+  responsibleId      String?   @map("responsible_id")
+  notes              String?   @db.Text
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, category])
+  @@index([tenantId, location])
+  @@index([tenantId, inventoryNumber])
+  @@map("catalog_assets_fixed_asset")
+}
+
+model Document_assets_receipt {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  number        String
+  status        String    @default("SAVED")
+  postedAt      DateTime? @map("posted_at")
+  postedBy      String?   @map("posted_by") @db.Uuid
+  version       Int       @default(0)
+  date          DateTime
+  asset         String    @db.Uuid // ref -> assets.fixed_asset
+  supplier      String?   @db.Uuid
+  amount        Decimal   @db.Decimal(14, 2)
+  location      String?
+  responsibleId String?   @map("responsible_id")
+  notes         String?   @db.Text
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, asset])
+  @@index([tenantId, supplier])
+  @@map("document_assets_receipt")
+}
+
+model Document_assets_commissioning {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  asset           String    @db.Uuid
+  location        String?
+  responsibleId   String?   @map("responsible_id")
+  commissionNotes String?   @map("commission_notes") @db.Text
+  workflowStatus  String    @default("draft") @map("workflow_status")
+  approvedBy      String?   @map("approved_by")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, workflowStatus])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, asset])
+  @@map("document_assets_commissioning")
+}
+
+model Document_assets_disposal {
+  id               String    @id @default(uuid()) @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  number           String
+  status           String    @default("SAVED")
+  postedAt         DateTime? @map("posted_at")
+  postedBy         String?   @map("posted_by") @db.Uuid
+  version          Int       @default(0)
+  date             DateTime
+  asset            String    @db.Uuid
+  reason           String?
+  disposalMethod   String?   @map("disposal_method") // 'sold' | 'scrapped' | 'donated' | 'lost' | 'other'
+  recoverableValue Decimal?  @map("recoverable_value") @db.Decimal(14, 2)
+  approvedBy       String?   @map("approved_by")
+  notes            String?   @db.Text
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, asset])
+  @@index([tenantId, disposalMethod])
+  @@map("document_assets_disposal")
+}
+
+model Movement_purchases_expected_stock {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  docRef    String   @map("doc_ref") @db.Uuid
+  docType   String   @map("doc_type")
+  kind      String
+  active    Boolean  @default(true)
+  timestamp DateTime
+  warehouse String   @db.Uuid
+  product   String   @db.Uuid
+  supplier  String   @db.Uuid
+  quantity  Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, active])
+  @@index([tenantId, docRef])
+  @@index([tenantId, active, warehouse, product])
+  @@index([tenantId, active, supplier, timestamp])
+  @@map("movement_purchases_expected_stock")
+}
+
+// <generator:end>
+
+/// Platform-wide key/value settings, NOT scoped to any tenant. One row per
+/// setting key. Reads/writes via withBypass (no tenant context required).
+model PlatformSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  @@map("platform_setting")
+}
+
+model PlatformAuditLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  actorClerkId String   @map("actor_clerk_id")
+  action       String
+  tenantId     String?  @map("tenant_id") @db.Uuid
+  targetUserId String?  @map("target_user_id") @db.Uuid
+  before       Json?
+  after        Json?
+  ip           String?
+  userAgent    String?  @map("user_agent")
+  source       String?  @db.VarChar(16)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([actorClerkId, createdAt])
+  @@index([tenantId, createdAt])
+  @@map("platform_audit_log")
+}
+
+/// Per-tenant premium-addon entitlement. Row presence (with non-expired
+/// expiresAt) means the addon is currently ON for that tenant. Toggled
+/// exclusively by super-admin via /super-admin/tenants/[id]/addons.
+model TenantAddon {
+  tenantId  String    @map("tenant_id") @db.Uuid
+  addonKey  String    @map("addon_key")
+  enabledAt DateTime  @default(now()) @map("enabled_at")
+  enabledBy String    @map("enabled_by") @db.Uuid
+  expiresAt DateTime? @map("expires_at")
+  notes     String?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@id([tenantId, addonKey])
+  @@index([tenantId])
+  @@map("tenant_addon")
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// Addon: AI Invoice OCR (ai_invoice_ocr)
+// ──────────────────────────────────────────────────────────────────────────
+
+enum OcrJobStatus {
+  pending
+  running
+  done
+  failed
+
+  @@map("ocr_job_status")
+}
+
+/// One AI-OCR extraction job per uploaded supplier-invoice photo.
+/// Lifecycle: pending → running → done|failed. Output JSON conforms to the
+/// schema in platform/addons/ai-invoice-ocr/schemas.ts.
+model PurchaseInvoiceOcrJob {
+  id           String       @id @default(uuid()) @db.Uuid
+  tenantId     String       @map("tenant_id") @db.Uuid
+  createdById  String       @map("created_by_id") @db.Uuid
+  attachmentId String       @map("attachment_id") @db.Uuid
+  status       OcrJobStatus @default(pending)
+  output       Json?
+  errorMessage String?      @map("error_message")
+  modelName    String?      @map("model_name")
+  inputTokens  Int?         @map("input_tokens")
+  outputTokens Int?         @map("output_tokens")
+  startedAt    DateTime?    @map("started_at")
+  finishedAt   DateTime?    @map("finished_at")
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  tenant     Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  attachment Attachment @relation(fields: [attachmentId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@map("purchase_invoice_ocr_job")
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// Addon: Bank Import + Auto-match (bank_integration)
+// ──────────────────────────────────────────────────────────────────────────
+
+enum BankRowDirection {
+  in
+  out
+
+  @@map("bank_row_direction")
+}
+
+enum BankRowStatus {
+  pending
+  matched
+  confirmed
+  ignored
+  conflict
+
+  @@map("bank_row_status")
+}
+
+model BankAccount {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  name      String
+  bankName  String?  @map("bank_name")
+  accountNo String   @map("account_no")
+  currency  String   @db.VarChar(3)
+  bic       String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant  Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  imports BankStatementImport[]
+  rows    BankStatementRow[]
+
+  @@unique([tenantId, accountNo])
+  @@index([tenantId])
+  @@map("bank_account")
+}
+
+model BankStatementImport {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  bankAccountId String   @map("bank_account_id") @db.Uuid
+  format        String
+  filename      String
+  rowCount      Int      @map("row_count")
+  matchedCount  Int      @default(0) @map("matched_count")
+  importedById  String   @map("imported_by_id") @db.Uuid
+  importedAt    DateTime @default(now()) @map("imported_at")
+  attachmentId  String?  @map("attachment_id") @db.Uuid
+
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  bankAccount BankAccount        @relation(fields: [bankAccountId], references: [id])
+  rows        BankStatementRow[]
+  attachment  Attachment?        @relation(fields: [attachmentId], references: [id])
+
+  @@index([tenantId, importedAt])
+  @@map("bank_statement_import")
+}
+
+model BankStatementRow {
+  id                  String           @id @default(uuid()) @db.Uuid
+  tenantId            String           @map("tenant_id") @db.Uuid
+  importId            String           @map("import_id") @db.Uuid
+  bankAccountId       String           @map("bank_account_id") @db.Uuid
+  valueDate           DateTime         @map("value_date")
+  direction           BankRowDirection
+  amount              Decimal          @db.Decimal(18, 2)
+  currency            String           @default("RUB")
+  counterpartyName    String?          @map("counterparty_name")
+  counterpartyAccount String?          @map("counterparty_account")
+  counterpartyInn     String?          @map("counterparty_inn")
+  narrative           String?
+  externalId          String?          @map("external_id")
+  status              BankRowStatus    @default(pending)
+  matchConfidence     Decimal?         @map("match_confidence") @db.Decimal(4, 3)
+  matchedDocId        String?          @map("matched_doc_id") @db.Uuid
+  matchedDocType      String?          @map("matched_doc_type")
+  paymentDocId        String?          @map("payment_doc_id") @db.Uuid
+  paymentDocType      String?          @map("payment_doc_type")
+  resolvedById        String?          @map("resolved_by_id") @db.Uuid
+  resolvedAt          DateTime?        @map("resolved_at")
+
+  tenant      Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  import      BankStatementImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+  bankAccount BankAccount         @relation(fields: [bankAccountId], references: [id])
+
+  @@unique([tenantId, externalId])
+  @@index([tenantId, status])
+  @@index([importId])
+  @@map("bank_statement_row")
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Super Admin Mega — schemas for super-admin-pro, in-app-communications,
+//  marketing-site sub-projects (2026-05-13).
+// ══════════════════════════════════════════════════════════════════════════
+
+// ─── A. Super Admin Pro ──────────────────────────────────────────────────
+
+enum SupportTicketStatus {
+  open
+  in_progress
+  resolved
+  wont_fix
+
+  @@map("support_ticket_status")
+}
+
+model TenantTag {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  label     String
+  color     String   @default("zinc")
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @map("created_by") @db.Uuid
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, label])
+  @@map("tenant_tag")
+}
+
+model TenantNote {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @map("created_by") @db.Uuid
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, createdAt])
+  @@map("tenant_note")
+}
+
+model TenantSuspension {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @unique @map("tenant_id") @db.Uuid
+  reason      String
+  suspendedAt DateTime  @default(now()) @map("suspended_at")
+  suspendedBy String    @map("suspended_by") @db.Uuid
+  liftedAt    DateTime? @map("lifted_at")
+  liftedBy    String?   @map("lifted_by") @db.Uuid
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("tenant_suspension")
+}
+
+model TenantFeatureKill {
+  tenantId   String   @map("tenant_id") @db.Uuid
+  featureKey String   @map("feature_key")
+  reason     String?
+  killedAt   DateTime @default(now()) @map("killed_at")
+  killedBy   String   @map("killed_by") @db.Uuid
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@id([tenantId, featureKey])
+  @@map("tenant_feature_kill")
+}
+
+model TenantPriceOverride {
+  tenantId        String    @id @map("tenant_id") @db.Uuid
+  monthlyPriceUsd Decimal   @map("monthly_price_usd") @db.Decimal(12, 2)
+  reason          String?
+  effectiveFrom   DateTime  @default(now()) @map("effective_from")
+  effectiveUntil  DateTime? @map("effective_until")
+  createdBy       String    @map("created_by") @db.Uuid
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("tenant_price_override")
+}
+
+model SupportTicket {
+  id           String              @id @default(uuid()) @db.Uuid
+  tenantId     String?             @map("tenant_id") @db.Uuid
+  userId       String?             @map("user_id") @db.Uuid
+  subject      String
+  body         String
+  urlCaptured  String?             @map("url_captured")
+  browserAgent String?             @map("browser_agent")
+  status       SupportTicketStatus @default(open)
+  assignedTo   String?             @map("assigned_to") @db.Uuid
+  resolution   String?
+  createdAt    DateTime            @default(now()) @map("created_at")
+  resolvedAt   DateTime?           @map("resolved_at")
+
+  @@index([status, createdAt])
+  @@index([tenantId])
+  @@map("support_ticket")
+}
+
+/// Tenant-initiated upgrade request, resolved by an operator off-platform.
+/// PLATFORM-LEVEL, NO RLS — written via `withBypass` with tenantId set from the
+/// verified server context (never client input), read by the super-admin console
+/// via `withBypass`. Mirrors `support_ticket` (see platform/support/create-ticket.ts).
+/// Intentionally has NO `ENABLE ROW LEVEL SECURITY` policy.
+model UpgradeRequest {
+  id                String      @id @default(uuid()) @db.Uuid
+  tenantId          String      @map("tenant_id") @db.Uuid
+  userId            String?     @map("user_id") @db.Uuid
+  companyName       String      @map("company_name")
+  contactEmail      String      @map("contact_email")
+  contactPhone      String      @map("contact_phone")
+  requestedPlan     TenantPlan? @map("requested_plan")
+  note              String?
+  status            String      @default("pending")
+  resolvedAt        DateTime?   @map("resolved_at")
+  resolvedByClerkId String?     @map("resolved_by_clerk_id")
+  approvedPlan      TenantPlan? @map("approved_plan")
+  paymentMethod     String?     @map("payment_method")
+  paymentAmount     Decimal?    @map("payment_amount") @db.Decimal(18, 2)
+  paymentCurrency   String?     @map("payment_currency")
+  paymentReference  String?     @map("payment_reference")
+  createdAt         DateTime    @default(now()) @map("created_at")
+
+  @@index([status, createdAt])
+  @@index([tenantId])
+  @@map("upgrade_request")
+}
+
+model CronRun {
+  id           String    @id @default(uuid()) @db.Uuid
+  jobName      String    @map("job_name")
+  startedAt    DateTime  @default(now()) @map("started_at")
+  finishedAt   DateTime? @map("finished_at")
+  status       String    @default("running")
+  output       String?
+  errorMessage String?   @map("error_message")
+
+  @@index([jobName, startedAt])
+  @@map("cron_run")
+}
+
+model PlatformMetricDaily {
+  day       DateTime @db.Date
+  key       String
+  value     Decimal  @db.Decimal(18, 4)
+  tags      Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([day, key])
+  @@map("platform_metric_daily")
+}
+
+model PlatformAuditSavedFilter {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  ownerClerkId String   @map("owner_clerk_id")
+  criteria     Json
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([ownerClerkId])
+  @@map("platform_audit_saved_filter")
+}
+
+// ─── B. In-App Communications ────────────────────────────────────────────
+
+enum AnnouncementSurface {
+  banner
+  popup
+  feed_only
+
+  @@map("announcement_surface")
+}
+
+enum AnnouncementStatus {
+  draft
+  scheduled
+  live
+  archived
+
+  @@map("announcement_status")
+}
+
+model MarketingAnnouncement {
+  id          String              @id @default(uuid()) @db.Uuid
+  internalKey String              @unique @map("internal_key")
+  surface     AnnouncementSurface
+  status      AnnouncementStatus  @default(draft)
+  startAt     DateTime?           @map("start_at")
+  endAt       DateTime?           @map("end_at")
+  dismissible Boolean             @default(true)
+  ctaLabel    String?             @map("cta_label")
+  ctaUrl      String?             @map("cta_url")
+  targeting   Json                @default("{}")
+  createdBy   String              @map("created_by") @db.Uuid
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+
+  translations MarketingAnnouncementTranslation[]
+  versions     MarketingAnnouncementVersion[]
+  userStates   UserAnnouncementState[]
+
+  @@index([status, startAt])
+  @@map("marketing_announcement")
+}
+
+model MarketingAnnouncementTranslation {
+  announcementId String @map("announcement_id") @db.Uuid
+  locale         String @db.VarChar(8)
+  title          String
+  body           String
+
+  announcement MarketingAnnouncement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@id([announcementId, locale])
+  @@map("marketing_announcement_translation")
+}
+
+model MarketingAnnouncementVersion {
+  id             String   @id @default(uuid()) @db.Uuid
+  announcementId String   @map("announcement_id") @db.Uuid
+  snapshot       Json
+  createdAt      DateTime @default(now()) @map("created_at")
+  createdBy      String   @map("created_by") @db.Uuid
+
+  announcement MarketingAnnouncement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@index([announcementId, createdAt])
+  @@map("marketing_announcement_version")
+}
+
+model UserAnnouncementState {
+  userId           String    @map("user_id") @db.Uuid
+  announcementId   String    @map("announcement_id") @db.Uuid
+  viewedAt         DateTime? @map("viewed_at")
+  dismissedAt      DateTime? @map("dismissed_at")
+  clickedThroughAt DateTime? @map("clicked_through_at")
+  impressionCount  Int       @default(0) @map("impression_count")
+
+  announcement MarketingAnnouncement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@id([userId, announcementId])
+  @@index([announcementId])
+  @@map("user_announcement_state")
+}
+
+// ─── C. Marketing Site ───────────────────────────────────────────────────
+
+enum BlogPostStatus {
+  draft
+  published
+  archived
+
+  @@map("blog_post_status")
+}
+
+model MarketingSection {
+  id         String   @id @default(uuid()) @db.Uuid
+  pageKey    String   @map("page_key")
+  sectionKey String   @map("section_key")
+  locale     String   @db.VarChar(8)
+  content    Json
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  updatedBy  String   @map("updated_by") @db.Uuid
+
+  versions MarketingSectionVersion[]
+
+  @@unique([pageKey, sectionKey, locale])
+  @@map("marketing_section")
+}
+
+model MarketingSectionVersion {
+  id        String   @id @default(uuid()) @db.Uuid
+  sectionId String   @map("section_id") @db.Uuid
+  snapshot  Json
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @map("created_by") @db.Uuid
+
+  section MarketingSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId, createdAt])
+  @@map("marketing_section_version")
+}
+
+model BlogPost {
+  id           String         @id @default(uuid()) @db.Uuid
+  slug         String         @unique
+  status       BlogPostStatus @default(draft)
+  publishedAt  DateTime?      @map("published_at")
+  heroImageUrl String?        @map("hero_image_url")
+  authorName   String         @map("author_name")
+  tags         String[]       @default([])
+  createdBy    String         @map("created_by") @db.Uuid
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  translations BlogPostTranslation[]
+  versions     BlogPostVersion[]
+
+  @@index([status, publishedAt])
+  @@map("blog_post")
+}
+
+model BlogPostTranslation {
+  postId  String @map("post_id") @db.Uuid
+  locale  String @db.VarChar(8)
+  title   String
+  excerpt String
+  body    String
+
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([postId, locale])
+  @@map("blog_post_translation")
+}
+
+model BlogPostVersion {
+  id        String   @id @default(uuid()) @db.Uuid
+  postId    String   @map("post_id") @db.Uuid
+  snapshot  Json
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @map("created_by") @db.Uuid
+
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
+  @@map("blog_post_version")
+}
+
+model MarketingLead {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  email     String
+  company   String?
+  size      String?
+  message   String
+  source    String?
+  status    String   @default("new")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([status, createdAt])
+  @@map("marketing_lead")
+}
+
+model MarketingNewsletterSubscriber {
+  id             String    @id @default(uuid()) @db.Uuid
+  email          String    @unique
+  confirmedAt    DateTime? @map("confirmed_at")
+  unsubscribedAt DateTime? @map("unsubscribed_at")
+  source         String?
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  @@map("marketing_newsletter_subscriber")
+}
+
+model Document_sales_return_invoice {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  customer        String    @db.Uuid
+  warehouse       String    @db.Uuid
+  originalInvoice String?   @map("original_invoice") @db.Uuid
+  reason          String?   @db.Text
+  assignedRepId   String?   @map("assigned_rep_id")
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@map("document_sales_return_invoice")
+}
+
+model DocumentLine_sales_return_invoice_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  price      Decimal  @db.Decimal(14, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_sales_return_invoice_items")
+}
+
+model Document_inventory_stock_adjustment {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  number          String
+  status          String    @default("SAVED")
+  postedAt        DateTime? @map("posted_at")
+  postedBy        String?   @map("posted_by") @db.Uuid
+  version         Int       @default(0)
+  date            DateTime
+  warehouse       String    @db.Uuid
+  reason          String?   @db.Text
+  assignedBuyerId String?   @map("assigned_buyer_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@map("document_inventory_stock_adjustment")
+}
+
+model DocumentLine_inventory_stock_adjustment_items {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  documentId    String   @map("document_id") @db.Uuid
+  sequence      Int
+  product       String   @db.Uuid
+  quantityDelta Int      @map("quantity_delta")
+  unitCost      Decimal? @map("unit_cost") @db.Decimal(14, 2)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_inventory_stock_adjustment_items")
+}
+
+model Document_inventory_stock_transfer {
+  id                   String    @id @default(uuid()) @db.Uuid
+  tenantId             String    @map("tenant_id") @db.Uuid
+  number               String
+  status               String    @default("SAVED")
+  postedAt             DateTime? @map("posted_at")
+  postedBy             String?   @map("posted_by") @db.Uuid
+  version              Int       @default(0)
+  date                 DateTime
+  sourceWarehouse      String    @map("source_warehouse") @db.Uuid
+  destinationWarehouse String    @map("destination_warehouse") @db.Uuid
+  reason               String?   @db.Text
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  deletedAt            DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@map("document_inventory_stock_transfer")
+}
+
+model DocumentLine_inventory_stock_transfer_items {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  documentId String   @map("document_id") @db.Uuid
+  sequence   Int
+  product    String   @db.Uuid
+  quantity   Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_inventory_stock_transfer_items")
+}
+
+model Document_inventory_inventory_count {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  number      String
+  status      String    @default("SAVED")
+  postedAt    DateTime? @map("posted_at")
+  postedBy    String?   @map("posted_by") @db.Uuid
+  version     Int       @default(0)
+  date        DateTime
+  warehouse   String    @db.Uuid
+  countStatus String    @default("counting") @map("count_status")
+  note        String?   @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, status])
+  @@index([tenantId, postedAt])
+  @@index([tenantId, createdAt])
+  @@map("document_inventory_inventory_count")
+}
+
+model DocumentLine_inventory_inventory_count_items {
+  id               String   @id @default(uuid()) @db.Uuid
+  tenantId         String   @map("tenant_id") @db.Uuid
+  documentId       String   @map("document_id") @db.Uuid
+  sequence         Int
+  product          String   @db.Uuid
+  expectedQuantity Int?     @map("expected_quantity")
+  countedQuantity  Int      @map("counted_quantity")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, documentId, sequence])
+  @@index([tenantId])
+  @@index([tenantId, documentId])
+  @@map("document_line_inventory_inventory_count_items")
+}
+
+model Catalog_treasury_cash_register {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  code           String
+  name           String
+  note           String?   @db.Text
+  openingBalance Decimal   @default(0) @map("opening_balance") @db.Decimal(14, 2)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, name])
+  @@map("catalog_treasury_cash_register")
+}
+
+model Movement_treasury_cash_funds {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  docRef        String   @map("doc_ref") @db.Uuid
+  docType       String   @map("doc_type")
+  kind          String
+  active        Boolean  @default(true)
+  timestamp     DateTime
+  cashRegister  String   @map("cash_register") @db.Uuid // ref -> treasury.cash_register
+  relatedDocRef String?  @map("related_doc_ref") @db.Uuid
+  amount        Decimal  @db.Decimal(14, 2)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, active])
+  @@index([tenantId, docRef])
+  @@index([tenantId, active, timestamp])
+  @@index([tenantId, cashRegister, timestamp])
+  @@map("movement_treasury_cash_funds")
+}

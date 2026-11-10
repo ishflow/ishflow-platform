@@ -1,0 +1,75 @@
+import { defineSuperAdminCatalog } from '@/platform/metadata';
+
+defineSuperAdminCatalog({
+  module: 'super_admin',
+  name: 'cron_run',
+  label: {
+    ru: 'Запуск задачи',
+    en: 'Cron run',
+    tr: 'Görev çalıştırma',
+    ky: 'Cron иштеши',
+    uz: 'Cron yurishi',
+    de: 'Cron-Lauf',
+    fr: 'Exécution cron',
+    zh: '定时任务',
+  },
+  pluralLabel: {
+    ru: 'Запуски задач',
+    en: 'Cron runs',
+    tr: 'Görev çalıştırmaları',
+    ky: 'Cron иштештери',
+    uz: 'Cron yurishlari',
+    de: 'Cron-Läufe',
+    fr: 'Exécutions cron',
+    zh: '定时任务列表',
+  },
+  displayField: 'jobName',
+  requiredPermission: 'super_admin.cron_run:read',
+  fields: {
+    startedAt: { type: 'datetime', label: { ru: 'Начат', en: 'Started', tr: 'Başladı' } },
+    jobName: { type: 'string', label: { ru: 'Задача', en: 'Job', tr: 'Görev' } },
+    status: {
+      type: 'string',
+      label: { ru: 'Статус', en: 'Status', tr: 'Durum' },
+      enumValues: ['running', 'ok', 'failed'] as const,
+    },
+    finishedAt: { type: 'datetime', label: { ru: 'Завершён', en: 'Finished', tr: 'Bitti' } },
+    errorMessage: { type: 'string', label: { ru: 'Ошибка', en: 'Error', tr: 'Hata' } },
+  },
+  list: {
+    layout: 'table',
+    searchable: true,
+    listOnly: true,
+    columns: [
+      { key: 'startedAt', label: { ru: 'Начат', en: 'Started', tr: 'Başladı' } },
+      { key: 'jobName', label: { ru: 'Задача', en: 'Job', tr: 'Görev' } },
+      { key: 'status', label: { ru: 'Статус', en: 'Status', tr: 'Durum' } },
+      { key: 'finishedAt', label: { ru: 'Завершён', en: 'Finished', tr: 'Bitti' } },
+      { key: 'errorMessage', label: { ru: 'Ошибка', en: 'Error', tr: 'Hata' } },
+    ],
+    chips: [
+      { key: 'all', label: { ru: 'Все', en: 'All', tr: 'Tümü' } },
+      { key: 'running', label: { ru: 'Идёт', en: 'Running', tr: 'Çalışıyor' } },
+      { key: 'ok', label: { ru: 'Готово', en: 'OK', tr: 'Tamam' } },
+      { key: 'failed', label: { ru: 'Ошибка', en: 'Failed', tr: 'Hata' } },
+    ],
+  },
+  source: {
+    source: 'cronRun',
+    searchFields: ['jobName', 'errorMessage'],
+    chipFilters: {
+      running: { status: 'running' },
+      ok: { status: 'ok' },
+      failed: { status: 'failed' },
+    },
+    orderBy: { startedAt: 'desc' },
+    map: (r) => ({
+      id: r.id as string,
+      startedAt: r.startedAt,
+      jobName: r.jobName,
+      status: r.status,
+      finishedAt: r.finishedAt,
+      errorMessage: (r.errorMessage as string | null) ?? '—',
+    }),
+  },
+});

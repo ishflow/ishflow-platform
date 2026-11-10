@@ -1,0 +1,6 @@
+/ios-native
+/.worktrees
+/scripts/*.local.mjs
+/docs
+/playwright-report
+/test-results

@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-unit:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: canalog
+          POSTGRES_PASSWORD: canalog_dev_password
+          POSTGRES_DB: canalog_dev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U canalog -d canalog_dev"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DATABASE_URL: postgresql://canalog_app:canalog_app_dev_password@localhost:5432/canalog_dev?schema=public
+      DIRECT_URL: postgresql://canalog:canalog_dev_password@localhost:5432/canalog_dev?schema=public
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ci_placeholder
+      CLERK_SECRET_KEY: sk_test_ci_placeholder
+      CLERK_WEBHOOK_SIGNING_SECRET: whsec_ci_placeholder
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec dotenv -e /dev/null -- prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://canalog:canalog_dev_password@localhost:5432/canalog_dev?schema=public
+          DIRECT_URL: postgresql://canalog:canalog_dev_password@localhost:5432/canalog_dev?schema=public
+
+      - run: pnpm prisma generate
+
+      - run: pnpm lint
+
+      - run: pnpm typecheck
+
+      - run: pnpm test
+
+  build:
+    needs: lint-and-unit
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://canalog_app:canalog_app_dev_password@localhost:5432/canalog_dev?schema=public
+      DIRECT_URL: postgresql://canalog:canalog_dev_password@localhost:5432/canalog_dev?schema=public
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ci_placeholder
+      CLERK_SECRET_KEY: sk_test_ci_placeholder
+      CLERK_WEBHOOK_SIGNING_SECRET: whsec_ci_placeholder
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm prisma generate
+      - run: pnpm build

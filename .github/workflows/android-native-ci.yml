@@ -1,0 +1,59 @@
+name: Android Native CI
+
+on:
+  pull_request:
+    paths:
+      - 'android-native/**'
+      - '.github/workflows/android-native-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'android-native/**'
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install ktlint + detekt
+        run: |
+          curl -sSL -o /tmp/ktlint https://github.com/pinterest/ktlint/releases/download/1.8.0/ktlint
+          chmod +x /tmp/ktlint
+          sudo mv /tmp/ktlint /usr/local/bin/ktlint
+
+          curl -sSL -o /tmp/detekt-cli.zip https://github.com/detekt/detekt/releases/download/v1.23.8/detekt-cli-1.23.8.zip
+          unzip /tmp/detekt-cli.zip -d /tmp
+          sudo ln -sf /tmp/detekt-cli-1.23.8/bin/detekt-cli /usr/local/bin/detekt
+
+      - name: ktlint
+        working-directory: android-native
+        run: ktlint --relative "**/*.kt" "**/*.kts"
+
+      - name: detekt
+        working-directory: android-native
+        run: detekt --config config/detekt/detekt.yml --build-upon-default-config
+
+      - name: Android Lint
+        working-directory: android-native
+        run: ./gradlew lint
+
+      - name: Unit tests
+        working-directory: android-native
+        run: ./gradlew test
+
+      - name: Coverage gate
+        working-directory: android-native
+        run: ./gradlew koverVerify
+
+      - name: Assemble Debug
+        working-directory: android-native
+        run: ./gradlew assembleDebug

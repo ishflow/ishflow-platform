@@ -1,0 +1,18 @@
+{
+  "tool": {
+    "errors": {
+      "unauthorized": "Authentication failed. Provide a valid Bearer API key.",
+      "forbidden": "Your API key does not have the required scope for this tool.",
+      "not_found": "The requested resource was not found.",
+      "validation_error": "One or more arguments failed validation.",
+      "conflict": "A record with these unique fields already exists.",
+      "precondition_failed": "The current state of the resource does not permit this operation.",
+      "rate_limited": "Too many requests. Try again shortly.",
+      "internal_error": "An internal error occurred. The operator was notified.",
+      "invalid_api_key": "The provided API key is not valid.",
+      "feature_locked": "This feature is not available on your current plan.",
+      "insufficient_scope": "This operation requires a higher-scope API key.",
+      "tenant_required": "This tool requires a tenant-scoped API key. The current key is not bound to a tenant."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!--
+        Maps `${cacheDir}/pdf_share/*.pdf` files (written by PdfShareService) to
+        FileProvider URIs under `${applicationId}.fileprovider`. Path is the
+        cache-relative dir so the share sheet only sees PDF files, never other
+        cache contents.
+    -->
+    <cache-path name="pdf_share" path="pdf_share/" />
+    <!--
+        Maps `${cacheDir}/report_share/*.xlsx` files (written by ReportShareController)
+        to FileProvider URIs so the share chooser can send them to other apps.
+    -->
+    <cache-path name="report_share" path="report_share/" />
+</paths>

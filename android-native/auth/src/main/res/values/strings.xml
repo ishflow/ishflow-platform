@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="role_not_configured_title">Your role isn\'t configured yet</string>
+    <string name="role_not_configured_body">App features stay locked until your administrator grants you permissions.</string>
+    <string name="role_not_configured_contact">Contact administrator</string>
+    <string name="role_not_configured_sign_out">Sign out</string>
+    <string name="role_not_configured_contact_subject">App access — role not configured</string>
+    <string name="biometric_title">Verify your identity to unlock</string>
+    <string name="biometric_button_authenticate">Authenticate</string>
+    <string name="biometric_negative_signout">Sign out</string>
+</resources>

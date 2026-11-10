@@ -1,0 +1,6 @@
+Operation ID,Date,Amount,Currency,Direction,Counterparty,Counterparty BIN,Description
+KP-1,01.05.2026,250000.00,KZT,incoming,TOO Sary Arka,123456789012,Payment for invoice INV-2026-01
+KP-2,02.05.2026,80000.00,KZT,outgoing,TOO Akmola Supplies,234567890123,Supplier wire
+KP-3,03.05.2026,12000.50,KZT,incoming,IE Almaz,341234567890,Advance for project
+KP-4,04.05.2026,BAD,KZT,outgoing,TOO Bug,,Should be skipped
+KP-5,05.05.2026,5000,KZT,,,567890123456,Income without counterparty name
