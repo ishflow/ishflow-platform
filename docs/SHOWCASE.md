@@ -67,9 +67,14 @@ Cross-tenant administration: tenant list and detail, users, audit log, support t
 
 ![Operator console: tenant list](media/showcase/09-operator-console.png)
 
-## Mobile
+## 9. Mobile
 
-Native iOS (SwiftUI) and Android (Jetpack Compose) apps for daily operations run against the same backend: sales and purchase documents, payments, stock and prices. Their sources are in `ios-native/` and `android-native/`.
+Native iOS (SwiftUI) and Android (Jetpack Compose) apps for daily operations run against the same backend: sales and purchase documents, payments, stock and prices. Their sources are in `ios-native/` and `android-native/`. The screens below are the iOS app (iPhone simulator, demo data).
+
+![iOS dashboard](media/showcase/08-ios-dashboard.png)
+![iOS posted invoice](media/showcase/08-ios-document.png)
+![iOS dashboard, dark theme](media/showcase/08-ios-dashboard-dark.png)
+![iOS dashboard, Russian](media/showcase/08-ios-dashboard-ru.png)
 
 ## Film
 

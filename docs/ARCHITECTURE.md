@@ -107,7 +107,7 @@ Components are shadcn/ui, styled only with theme tokens, so every screen works i
 
 ## 7. Internationalization
 
-- Interface strings go through next-intl. Catalogs live in `messages/<locale>.json` for 8 locales: `ru` (default, no URL prefix), `en` (fallback), `tr`, `uz`, `ky`, `de`, `fr`, `zh`.
+- Interface strings go through next-intl. Catalogs live in `messages/<locale>.json` for 8 locales: `ru` (default, no URL prefix), `en` (fallback), `tr`, `uz`, `ky`, `de`, `fr`, `zh`. Russian, English, Turkish, Uzbek and Kyrgyz are translated; German, French and Chinese are mostly English placeholders.
 - Business object labels (field names, document titles) live in the metadata itself, so a new document arrives translated.
 - The native apps carry their own localized string catalogs.
 

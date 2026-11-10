@@ -114,6 +114,12 @@ From these files:
 - **Multilingual:** eight locales are wired up via next-intl (Russian default, English, Turkish, Uzbek, Kyrgyz, German, French, Chinese). Russian, English, Turkish, Uzbek and Kyrgyz are translated; German, French and Chinese are mostly English placeholders.
 - **Light and dark themes** throughout, built on shadcn/ui design tokens.
 - **Native mobile apps:** SwiftUI for iOS and Kotlin with Jetpack Compose for Android, focused on daily operations (sales, purchases, payments, stock) against the same backend.
+
+<p align="center">
+  <img src="docs/media/mobile.png" alt="The native iOS app: dashboard, a posted invoice and the new sale screen" width="90%"><br>
+  <sub>Native iOS app (SwiftUI) running against the same engine</sub>
+</p>
+
 - **Public API and MCP:** a REST API (`/api/v1`) with API keys, and a Model Context Protocol server (`/api/mcp`) that lets AI agents read and post documents through the same engine. See [`packages/mcp-tools`](packages/mcp-tools/README.md).
 - **Operator console:** a super-admin area for tenants, users, audit log, support tickets and feature flags.
 - **Audit trail:** every create, update, post and unpost is logged with its source (web, mobile, API, MCP).
@@ -174,7 +180,7 @@ More detail in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). A guided screen tou
 |---|---|
 | Web | Next.js 16 (App Router), React 19, TypeScript (strict) |
 | UI | Tailwind CSS 4, shadcn/ui, Recharts, next-themes |
-| i18n | next-intl, 8 locales |
+| i18n | next-intl, 8 locales wired up (5 translated) |
 | Data | PostgreSQL 16, Prisma, row-level security |
 | Auth | Clerk (users and organizations), mobile JWT, API keys |
 | Billing | Stripe |
